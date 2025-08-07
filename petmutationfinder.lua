@@ -237,6 +237,9 @@ startButton.MouseLeave:Connect(function()
 end)
 
 startButton.MouseButton1Click:Connect(function()
-    -- ADD YOUR START BUTTON FUNCTIONS HERE
-    -- Selected mutation can be accessed via: selectedMutation
+    queue_on_teleport([[
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/jzeerobloxscripts/grow-a-garden/refs/heads/main/qwerty/loop.lua"))()
+    ]])
+    wait(5)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/jzeerobloxscripts/grow-a-garden/refs/heads/main/qwerty/generalfunctions.lua"))()
 end)
