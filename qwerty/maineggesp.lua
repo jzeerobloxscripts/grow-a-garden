@@ -13,8 +13,8 @@ screenGui.Parent = playerGui
 
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 380, 0, 320) -- Increased size
-mainFrame.Position = UDim2.new(0.5, -190, 0.5, -175) -- Adjusted position for bigger frame
+mainFrame.Size = UDim2.new(0, 380, 0, 300)
+mainFrame.Position = UDim2.new(0.5, -190, 0.5, -150)
 mainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 55)
 mainFrame.BorderSizePixel = 2
 mainFrame.BorderColor3 = Color3.fromRGB(85, 170, 255)
@@ -233,7 +233,6 @@ local function applyEggESP(eggModel)
     
     local hatchReady = getHatchState(eggModel)
     
-    -- Calculate billboard height based on enabled features
     local billboardHeight = 0
     if espEnabled then billboardHeight = billboardHeight + 25 end
     if kgEnabled then billboardHeight = billboardHeight + 25 end
@@ -248,7 +247,6 @@ local function applyEggESP(eggModel)
     
     local currentYPos = 0
     
-    -- Pet ESP Label (Top)
     if espEnabled then
         local label = Instance.new("TextLabel")
         label.Size = UDim2.new(1, 0, 0, 25)
@@ -273,7 +271,6 @@ local function applyEggESP(eggModel)
         currentYPos = currentYPos + 25
     end
     
-    -- KG ESP Label (Bottom)
     if kgEnabled then
         if not kgPredictions[eggModel] then
             kgPredictions[eggModel] = generateKGPrediction()
@@ -286,7 +283,7 @@ local function applyEggESP(eggModel)
         local kg = kgPredictions[eggModel]
         local kgType = getKGLabel(kg)
         kgLabel.Text = "["..kgType.." | "..string.format("%.2f", kg).."kg]"
-        kgLabel.TextColor3 = Color3.new(1, 1, 1) -- Changed to white
+        kgLabel.TextColor3 = Color3.new(1, 1, 1)
         kgLabel.TextStrokeTransparency = 0
         kgLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
         kgLabel.TextScaled = false
@@ -433,20 +430,20 @@ scrollingFrame.Position = UDim2.new(0, 10, 0, 50)
 scrollingFrame.BackgroundTransparency = 1
 scrollingFrame.ScrollBarThickness = 6
 scrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(85, 170, 255)
-scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 230) -- Increased canvas size
+scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 180)
 scrollingFrame.ScrollingDirection = Enum.ScrollingDirection.Y
 scrollingFrame.Parent = mainFrame
 
 local contentFrame = Instance.new("Frame")
 contentFrame.Name = "ContentFrame"
-contentFrame.Size = UDim2.new(1, 0, 0, 230) -- Increased content size
+contentFrame.Size = UDim2.new(1, 0, 0, 180)
 contentFrame.Position = UDim2.new(0, 0, 0, 0)
 contentFrame.BackgroundTransparency = 1
 contentFrame.Parent = scrollingFrame
 
 local randomizeButton = Instance.new("TextButton")
 randomizeButton.Name = "RandomizeButton"
-randomizeButton.Size = UDim2.new(0, 300, 0, 40) -- Increased width
+randomizeButton.Size = UDim2.new(0, 300, 0, 40)
 randomizeButton.Position = UDim2.new(0.5, -150, 0, 10)
 randomizeButton.BackgroundColor3 = Color3.fromRGB(85, 170, 255)
 randomizeButton.Text = "Randomize Pets"
@@ -463,14 +460,14 @@ randomizeCorner.Parent = randomizeButton
 
 local espContainer = Instance.new("Frame")
 espContainer.Name = "ESPContainer"
-espContainer.Size = UDim2.new(0, 300, 0, 30) -- Increased width
+espContainer.Size = UDim2.new(0, 300, 0, 30)
 espContainer.Position = UDim2.new(0.5, -150, 0, 60)
 espContainer.BackgroundTransparency = 1
 espContainer.Parent = contentFrame
 
 local espLabel = Instance.new("TextLabel")
 espLabel.Name = "ESPLabel"
-espLabel.Size = UDim2.new(0, 60, 1, 0)
+espLabel.Size = UDim2.new(0, 120, 1, 0)
 espLabel.Position = UDim2.new(0, 0, 0, 0)
 espLabel.BackgroundTransparency = 1
 espLabel.Text = "ESP:"
@@ -483,7 +480,7 @@ espLabel.Parent = espContainer
 local espSwitch = Instance.new("Frame")
 espSwitch.Name = "ESPSwitch"
 espSwitch.Size = UDim2.new(0, 50, 0, 25)
-espSwitch.Position = UDim2.new(0, 70, 0, 2.5)
+espSwitch.Position = UDim2.new(0, 130, 0, 2.5)
 espSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
 espSwitch.BorderSizePixel = 1
 espSwitch.BorderColor3 = Color3.fromRGB(85, 170, 255)
@@ -508,7 +505,7 @@ espButtonCorner.Parent = espSwitchButton
 
 local kgContainer = Instance.new("Frame")
 kgContainer.Name = "KGContainer"
-kgContainer.Size = UDim2.new(0, 300, 0, 30) -- Increased width
+kgContainer.Size = UDim2.new(0, 300, 0, 30)
 kgContainer.Position = UDim2.new(0.5, -150, 0, 95)
 kgContainer.BackgroundTransparency = 1
 kgContainer.Parent = contentFrame
@@ -553,7 +550,7 @@ kgButtonCorner.Parent = kgSwitchButton
 
 local autoContainer = Instance.new("Frame")
 autoContainer.Name = "AutoContainer"
-autoContainer.Size = UDim2.new(0, 300, 0, 30) -- Increased width
+autoContainer.Size = UDim2.new(0, 300, 0, 30)
 autoContainer.Position = UDim2.new(0.5, -150, 0, 130)
 autoContainer.BackgroundTransparency = 1
 autoContainer.Parent = contentFrame
