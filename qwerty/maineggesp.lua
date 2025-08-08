@@ -13,8 +13,8 @@ screenGui.Parent = playerGui
 
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 320, 0, 300)
-mainFrame.Position = UDim2.new(0.5, -160, 0.5, -100)
+mainFrame.Size = UDim2.new(0, 380, 0, 350) -- Increased size
+mainFrame.Position = UDim2.new(0.5, -190, 0.5, -175) -- Adjusted position for bigger frame
 mainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 55)
 mainFrame.BorderSizePixel = 2
 mainFrame.BorderColor3 = Color3.fromRGB(85, 170, 255)
@@ -233,18 +233,26 @@ local function applyEggESP(eggModel)
     
     local hatchReady = getHatchState(eggModel)
     
+    -- Calculate billboard height based on enabled features
+    local billboardHeight = 0
+    if espEnabled then billboardHeight = billboardHeight + 25 end
+    if kgEnabled then billboardHeight = billboardHeight + 25 end
+    
     local billboard = Instance.new("BillboardGui")
     billboard.Name = "PetBillboard"
-    billboard.Size = UDim2.new(0, 270, 0, kgEnabled and 50 or 25)
+    billboard.Size = UDim2.new(0, 270, 0, billboardHeight)
     billboard.StudsOffset = Vector3.new(0, 4.5, 0)
     billboard.AlwaysOnTop = true
     billboard.MaxDistance = 500
     billboard.Parent = basePart
     
+    local currentYPos = 0
+    
+    -- Pet ESP Label (Top)
     if espEnabled then
         local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(1, 0, kgEnabled and 0.5 or 1, 0)
-        label.Position = UDim2.new(0, 0, 0, 0)
+        label.Size = UDim2.new(1, 0, 0, 25)
+        label.Position = UDim2.new(0, 0, 0, currentYPos)
         label.BackgroundTransparency = 1
         label.Text = "["..eggModel.Name.."] ???"
         if not hatchReady then
@@ -255,27 +263,30 @@ local function applyEggESP(eggModel)
             label.TextColor3 = Color3.new(1, 1, 1)
             label.TextStrokeTransparency = 0
         end
+        label.TextStrokeColor3 = Color3.new(0, 0, 0)
         label.TextScaled = false
         label.TextSize = 18
         label.TextWrapped = false
         label.TextTruncate = Enum.TextTruncate.AtEnd
         label.Font = Enum.Font.FredokaOne
         label.Parent = billboard
+        currentYPos = currentYPos + 25
     end
     
+    -- KG ESP Label (Bottom)
     if kgEnabled then
         if not kgPredictions[eggModel] then
             kgPredictions[eggModel] = generateKGPrediction()
         end
         
         local kgLabel = Instance.new("TextLabel")
-        kgLabel.Size = UDim2.new(1, 0, espEnabled and 0.5 or 1, 0)
-        kgLabel.Position = UDim2.new(0, 0, espEnabled and 0.5 or 0, 0)
+        kgLabel.Size = UDim2.new(1, 0, 0, 25)
+        kgLabel.Position = UDim2.new(0, 0, 0, currentYPos)
         kgLabel.BackgroundTransparency = 1
         local kg = kgPredictions[eggModel]
         local kgType = getKGLabel(kg)
         kgLabel.Text = "["..kgType.." | "..string.format("%.2f", kg).."kg]"
-        kgLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
+        kgLabel.TextColor3 = Color3.new(1, 1, 1) -- Changed to white
         kgLabel.TextStrokeTransparency = 0
         kgLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
         kgLabel.TextScaled = false
@@ -422,21 +433,21 @@ scrollingFrame.Position = UDim2.new(0, 10, 0, 50)
 scrollingFrame.BackgroundTransparency = 1
 scrollingFrame.ScrollBarThickness = 6
 scrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(85, 170, 255)
-scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 180)
+scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 230) -- Increased canvas size
 scrollingFrame.ScrollingDirection = Enum.ScrollingDirection.Y
 scrollingFrame.Parent = mainFrame
 
 local contentFrame = Instance.new("Frame")
 contentFrame.Name = "ContentFrame"
-contentFrame.Size = UDim2.new(1, 0, 0, 180)
+contentFrame.Size = UDim2.new(1, 0, 0, 230) -- Increased content size
 contentFrame.Position = UDim2.new(0, 0, 0, 0)
 contentFrame.BackgroundTransparency = 1
 contentFrame.Parent = scrollingFrame
 
 local randomizeButton = Instance.new("TextButton")
 randomizeButton.Name = "RandomizeButton"
-randomizeButton.Size = UDim2.new(0, 250, 0, 40)
-randomizeButton.Position = UDim2.new(0.5, -125, 0, 10)
+randomizeButton.Size = UDim2.new(0, 300, 0, 40) -- Increased width
+randomizeButton.Position = UDim2.new(0.5, -150, 0, 10)
 randomizeButton.BackgroundColor3 = Color3.fromRGB(85, 170, 255)
 randomizeButton.Text = "Randomize Pets"
 randomizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -452,8 +463,8 @@ randomizeCorner.Parent = randomizeButton
 
 local espContainer = Instance.new("Frame")
 espContainer.Name = "ESPContainer"
-espContainer.Size = UDim2.new(0, 250, 0, 30)
-espContainer.Position = UDim2.new(0.5, -125, 0, 60)
+espContainer.Size = UDim2.new(0, 300, 0, 30) -- Increased width
+espContainer.Position = UDim2.new(0.5, -150, 0, 60)
 espContainer.BackgroundTransparency = 1
 espContainer.Parent = contentFrame
 
@@ -497,8 +508,8 @@ espButtonCorner.Parent = espSwitchButton
 
 local kgContainer = Instance.new("Frame")
 kgContainer.Name = "KGContainer"
-kgContainer.Size = UDim2.new(0, 250, 0, 30)
-kgContainer.Position = UDim2.new(0.5, -125, 0, 95)
+kgContainer.Size = UDim2.new(0, 300, 0, 30) -- Increased width
+kgContainer.Position = UDim2.new(0.5, -150, 0, 95)
 kgContainer.BackgroundTransparency = 1
 kgContainer.Parent = contentFrame
 
@@ -542,8 +553,8 @@ kgButtonCorner.Parent = kgSwitchButton
 
 local autoContainer = Instance.new("Frame")
 autoContainer.Name = "AutoContainer"
-autoContainer.Size = UDim2.new(0, 250, 0, 30)
-autoContainer.Position = UDim2.new(0.5, -125, 0, 130)
+autoContainer.Size = UDim2.new(0, 300, 0, 30) -- Increased width
+autoContainer.Position = UDim2.new(0.5, -150, 0, 130)
 autoContainer.BackgroundTransparency = 1
 autoContainer.Parent = contentFrame
 
@@ -671,6 +682,7 @@ espSwitchButton.MouseButton1Click:Connect(function()
         if not kgEnabled then
             removeAllESP()
         else
+            -- Refresh ESP for KG-only display
             for eggModel, _ in pairs(trackedEggs) do
                 removeEggESP(eggModel)
                 applyEggESP(eggModel)
@@ -692,6 +704,7 @@ kgSwitchButton.MouseButton1Click:Connect(function()
         if not espEnabled then
             removeAllESP()
         else
+            -- Refresh ESP for pet-only display
             for eggModel, _ in pairs(trackedEggs) do
                 removeEggESP(eggModel)
                 applyEggESP(eggModel)
