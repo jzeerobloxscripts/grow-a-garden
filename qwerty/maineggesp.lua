@@ -7,128 +7,90 @@ local Workspace = game:GetService("Workspace")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Create main GUI with enhanced visuals
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "EggRandomizerGUI"
 screenGui.Parent = playerGui
 
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 350, 0, 450)
-mainFrame.Position = UDim2.new(0.5, -175, 0.5, -225)
-mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-mainFrame.BorderSizePixel = 0
+mainFrame.Size = UDim2.new(0, 320, 0, 200)
+mainFrame.Position = UDim2.new(0.5, -160, 0.5, -100)
+mainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+mainFrame.BorderSizePixel = 2
+mainFrame.BorderColor3 = Color3.fromRGB(85, 170, 255)
 mainFrame.ClipsDescendants = true
 mainFrame.Parent = screenGui
 
--- Modern gradient background
-local gradient = Instance.new("UIGradient")
-gradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0.0, Color3.fromRGB(45, 45, 65)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(35, 35, 55)),
-    ColorSequenceKeypoint.new(1.0, Color3.fromRGB(25, 25, 45))
-}
-gradient.Rotation = 45
-gradient.Parent = mainFrame
-
 local mainCorner = Instance.new("UICorner")
-mainCorner.CornerRadius = UDim.new(0, 15)
+mainCorner.CornerRadius = UDim.new(0, 12)
 mainCorner.Parent = mainFrame
 
--- Enhanced shadow effect
 local shadow = Instance.new("Frame")
 shadow.Name = "Shadow"
-shadow.Size = UDim2.new(1, 8, 1, 8)
-shadow.Position = UDim2.new(0, -4, 0, -4)
+shadow.Size = UDim2.new(1, 6, 1, 6)
+shadow.Position = UDim2.new(0, -3, 0, -3)
 shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-shadow.BackgroundTransparency = 0.6
+shadow.BackgroundTransparency = 0.7
 shadow.ZIndex = mainFrame.ZIndex - 1
 shadow.Parent = mainFrame
 
 local shadowCorner = Instance.new("UICorner")
-shadowCorner.CornerRadius = UDim.new(0, 19)
+shadowCorner.CornerRadius = UDim.new(0, 15)
 shadowCorner.Parent = shadow
 
--- Modern title bar with gradient
 local titleBar = Instance.new("Frame")
 titleBar.Name = "TitleBar"
-titleBar.Size = UDim2.new(1, 0, 0, 45)
+titleBar.Size = UDim2.new(1, 0, 0, 40)
 titleBar.Position = UDim2.new(0, 0, 0, 0)
 titleBar.BackgroundColor3 = Color3.fromRGB(85, 170, 255)
 titleBar.BorderSizePixel = 0
 titleBar.Parent = mainFrame
 
-local titleGradient = Instance.new("UIGradient")
-titleGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0.0, Color3.fromRGB(120, 200, 255)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(85, 170, 255)),
-    ColorSequenceKeypoint.new(1.0, Color3.fromRGB(50, 140, 220))
-}
-titleGradient.Rotation = 90
-titleGradient.Parent = titleBar
-
 local titleCorner = Instance.new("UICorner")
-titleCorner.CornerRadius = UDim.new(0, 15)
+titleCorner.CornerRadius = UDim.new(0, 12)
 titleCorner.Parent = titleBar
 
 local titleFix = Instance.new("Frame")
-titleFix.Size = UDim2.new(1, 0, 0, 15)
-titleFix.Position = UDim2.new(0, 0, 1, -15)
+titleFix.Size = UDim2.new(1, 0, 0, 12)
+titleFix.Position = UDim2.new(0, 0, 1, -12)
 titleFix.BackgroundColor3 = Color3.fromRGB(85, 170, 255)
 titleFix.BorderSizePixel = 0
 titleFix.Parent = titleBar
 
-local titleFixGradient = Instance.new("UIGradient")
-titleFixGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0.0, Color3.fromRGB(120, 200, 255)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(85, 170, 255)),
-    ColorSequenceKeypoint.new(1.0, Color3.fromRGB(50, 140, 220))
-}
-titleFixGradient.Rotation = 90
-titleFixGradient.Parent = titleFix
-
 local titleText = Instance.new("TextLabel")
 titleText.Name = "TitleText"
-titleText.Size = UDim2.new(1, -60, 1, 0)
-titleText.Position = UDim2.new(0, 15, 0, 0)
+titleText.Size = UDim2.new(1, -20, 1, 0)
+titleText.Position = UDim2.new(0, 10, 0, 0)
 titleText.BackgroundTransparency = 1
-titleText.Text = "🥚 Egg Randomizer Pro"
+titleText.Text = "Egg Randomizer"
 titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleText.TextScaled = true
-titleText.TextXAlignment = Enum.TextXAlignment.Left
-titleText.Font = Enum.Font.GothamBold
+titleText.TextXAlignment = Enum.TextXAlignment.Center
+titleText.Font = Enum.Font.FredokaOne
 titleText.Parent = titleBar
 
--- Enhanced close button
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
-closeButton.Text = "✕"
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 16
+closeButton.Text = "×"
+closeButton.Font = Enum.Font.GothamSemibold
+closeButton.TextSize = 20
 closeButton.TextColor3 = Color3.new(1, 1, 1)
-closeButton.BackgroundColor3 = Color3.fromRGB(255, 80, 80)
-closeButton.Size = UDim2.new(0, 30, 0, 30)
-closeButton.Position = UDim2.new(1, -37, 0, 7.5)
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 60, 80)
+closeButton.Size = UDim2.new(0, 25, 0, 25)
+closeButton.Position = UDim2.new(1, -30, 0, 7.5)
 closeButton.BorderSizePixel = 0
 
 local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 8)
+closeCorner.CornerRadius = UDim.new(0, 6)
 closeCorner.Parent = closeButton
-
-local closeGradient = Instance.new("UIGradient")
-closeGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 100, 100)),
-    ColorSequenceKeypoint.new(1.0, Color3.fromRGB(220, 60, 60))
-}
-closeGradient.Rotation = 90
-closeGradient.Parent = closeButton
-
 closeButton.Parent = titleBar
 
--- Egg randomizer data
 local rareChancePercentage = 0.1
 local espEnabled = false
+local kgEnabled = false
+local autoRandomize = false
 local truePetMap = {}
+local kgPredictions = {}
 local trackedEggs = {}
 
 local petTable = {
@@ -164,7 +126,6 @@ local rarePets = {
     ["French Fry Ferret"] = "Gourmet Egg"
 }
 
--- Helper functions (same as before)
 local function rainbowEffect(label)
     if not label or not label:IsDescendantOf(game) then return end
     spawn(function()
@@ -221,7 +182,41 @@ local function selectPetForEgg(eggName)
     return pets[math.random(1, #pets)]
 end
 
--- Enhanced ESP functions (same logic as before but with better visuals)
+local function generateKGPrediction()
+    local rand = math.random()
+    if rand < 0.6 then
+        return math.random(90, 190) / 100
+    elseif rand < 0.85 then
+        return math.random(191, 260) / 100
+    elseif rand < 0.95 then
+        return math.random(261, 390) / 100
+    elseif rand < 0.99 then
+        return math.random(391, 599) / 100
+    elseif rand < 0.999 then
+        return math.random(600, 799) / 100
+    else
+        return math.random(800, 987) / 100
+    end
+end
+
+local function getKGLabel(kg)
+    if kg >= 0.80 and kg <= 1.90 then
+        return "Tiny"
+    elseif kg >= 1.91 and kg <= 2.60 then
+        return "Normal"
+    elseif kg >= 2.61 and kg <= 3.90 then
+        return "Good"
+    elseif kg >= 3.91 and kg <= 5.99 then
+        return "Semi-Huge"
+    elseif kg >= 6.00 and kg <= 7.99 then
+        return "Huge"
+    elseif kg >= 8.00 and kg <= 9.87 then
+        return "Titanic"
+    else
+        return "Unknown"
+    end
+end
+
 local function applyEggESP(eggModel)
     if not eggModel then return end
     if trackedEggs[eggModel] then return end
@@ -231,7 +226,7 @@ local function applyEggESP(eggModel)
     local existingHighlight = eggModel:FindFirstChild("ESPHighlight")
     if existingHighlight then existingHighlight:Destroy() end
     
-    if not espEnabled then return end
+    if not espEnabled and not kgEnabled then return end
     
     local basePart = eggModel:FindFirstChildWhichIsA("BasePart")
     if not basePart then return end
@@ -240,31 +235,56 @@ local function applyEggESP(eggModel)
     
     local billboard = Instance.new("BillboardGui")
     billboard.Name = "PetBillboard"
-    billboard.Size = UDim2.new(0, 270, 0, 30)
+    billboard.Size = UDim2.new(0, 270, 0, kgEnabled and 50 or 25)
     billboard.StudsOffset = Vector3.new(0, 4.5, 0)
     billboard.AlwaysOnTop = true
     billboard.MaxDistance = 500
     billboard.Parent = basePart
     
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(1, 0, 1, 0)
-    label.BackgroundTransparency = 1
-    label.Text = "["..eggModel.Name.."] ???"
-    if not hatchReady then
-        label.Text = "["..eggModel.Name.."] ??? (Not Ready)"
-        label.TextColor3 = Color3.fromRGB(160, 160, 160)
-        label.TextStrokeTransparency = 0.5
-    else
-        label.TextColor3 = Color3.new(1, 1, 1)
-        label.TextStrokeTransparency = 0
+    if espEnabled then
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(1, 0, kgEnabled and 0.5 or 1, 0)
+        label.Position = UDim2.new(0, 0, 0, 0)
+        label.BackgroundTransparency = 1
+        label.Text = "["..eggModel.Name.."] ???"
+        if not hatchReady then
+            label.Text = "["..eggModel.Name.."] ??? (Not Ready)"
+            label.TextColor3 = Color3.fromRGB(160, 160, 160)
+            label.TextStrokeTransparency = 0.5
+        else
+            label.TextColor3 = Color3.new(1, 1, 1)
+            label.TextStrokeTransparency = 0
+        end
+        label.TextScaled = false
+        label.TextSize = 18
+        label.TextWrapped = false
+        label.TextTruncate = Enum.TextTruncate.AtEnd
+        label.Font = Enum.Font.FredokaOne
+        label.Parent = billboard
     end
-    label.TextScaled = false
-    label.TextSize = 20
-    label.TextWrapped = false
-    label.TextTruncate = Enum.TextTruncate.AtEnd
-    label.Font = Enum.Font.GothamBold
-    label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    label.Parent = billboard
+    
+    if kgEnabled then
+        if not kgPredictions[eggModel] then
+            kgPredictions[eggModel] = generateKGPrediction()
+        end
+        
+        local kgLabel = Instance.new("TextLabel")
+        kgLabel.Size = UDim2.new(1, 0, espEnabled and 0.5 or 1, 0)
+        kgLabel.Position = UDim2.new(0, 0, espEnabled and 0.5 or 0, 0)
+        kgLabel.BackgroundTransparency = 1
+        local kg = kgPredictions[eggModel]
+        local kgType = getKGLabel(kg)
+        kgLabel.Text = "["..kgType.." | "..string.format("%.2f", kg).."kg]"
+        kgLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
+        kgLabel.TextStrokeTransparency = 0
+        kgLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+        kgLabel.TextScaled = false
+        kgLabel.TextSize = 14
+        kgLabel.TextWrapped = false
+        kgLabel.TextTruncate = Enum.TextTruncate.AtEnd
+        kgLabel.Font = Enum.Font.GothamSemibold
+        kgLabel.Parent = billboard
+    end
     
     local highlight = Instance.new("Highlight")
     highlight.Name = "ESPHighlight"
@@ -381,11 +401,11 @@ local function randomizeNearbyEggs()
     for _, egg in ipairs(eggs) do
         local finalPet = selectPetForEgg(egg.Name)
         truePetMap[egg] = finalPet
-        if espEnabled then
+        if espEnabled or kgEnabled then
             if not trackedEggs[egg] then
                 applyEggESP(egg)
             end
-            if trackedEggs[egg] then
+            if trackedEggs[egg] and espEnabled then
                 spawn(function()
                     animateEggESP(egg, 5, finalPet)
                 end)
@@ -395,236 +415,178 @@ local function randomizeNearbyEggs()
     return #eggs
 end
 
--- Main content area
 local contentFrame = Instance.new("Frame")
 contentFrame.Name = "ContentFrame"
-contentFrame.Size = UDim2.new(1, -20, 1, -95)
-contentFrame.Position = UDim2.new(0, 10, 0, 55)
+contentFrame.Size = UDim2.new(1, -20, 1, -60)
+contentFrame.Position = UDim2.new(0, 10, 0, 50)
 contentFrame.BackgroundTransparency = 1
 contentFrame.Parent = mainFrame
 
--- Real-time egg list frame
-local eggListFrame = Instance.new("Frame")
-eggListFrame.Name = "EggListFrame"
-eggListFrame.Size = UDim2.new(1, -10, 0, 120)
-eggListFrame.Position = UDim2.new(0, 5, 0, 5)
-eggListFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
-eggListFrame.BorderSizePixel = 0
-eggListFrame.Parent = contentFrame
-
-local eggListCorner = Instance.new("UICorner")
-eggListCorner.CornerRadius = UDim.new(0, 10)
-eggListCorner.Parent = eggListFrame
-
-local eggListGradient = Instance.new("UIGradient")
-eggListGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0.0, Color3.fromRGB(40, 40, 60)),
-    ColorSequenceKeypoint.new(1.0, Color3.fromRGB(30, 30, 50))
-}
-eggListGradient.Rotation = 45
-eggListGradient.Parent = eggListFrame
-
--- Egg list title
-local eggListTitle = Instance.new("TextLabel")
-eggListTitle.Name = "EggListTitle"
-eggListTitle.Size = UDim2.new(1, -10, 0, 25)
-eggListTitle.Position = UDim2.new(0, 5, 0, 5)
-eggListTitle.BackgroundTransparency = 1
-eggListTitle.Text = "📍 Nearby Eggs (Updating...)"
-eggListTitle.TextColor3 = Color3.fromRGB(120, 200, 255)
-eggListTitle.TextSize = 14
-eggListTitle.TextXAlignment = Enum.TextXAlignment.Left
-eggListTitle.Font = Enum.Font.GothamBold
-eggListTitle.Parent = eggListFrame
-
--- Scrolling frame for egg list
-local eggScrollFrame = Instance.new("ScrollingFrame")
-eggScrollFrame.Name = "EggScrollFrame"
-eggScrollFrame.Size = UDim2.new(1, -10, 1, -35)
-eggScrollFrame.Position = UDim2.new(0, 5, 0, 30)
-eggScrollFrame.BackgroundTransparency = 1
-eggScrollFrame.BorderSizePixel = 0
-eggScrollFrame.ScrollBarThickness = 6
-eggScrollFrame.ScrollBarImageColor3 = Color3.fromRGB(120, 200, 255)
-eggScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-eggScrollFrame.Parent = eggListFrame
-
-local eggScrollCorner = Instance.new("UICorner")
-eggScrollCorner.CornerRadius = UDim.new(0, 6)
-eggScrollCorner.Parent = eggScrollFrame
-
--- List layout for eggs
-local eggListLayout = Instance.new("UIListLayout")
-eggListLayout.SortOrder = Enum.SortOrder.Name
-eggListLayout.Padding = UDim.new(0, 2)
-eggListLayout.Parent = eggScrollFrame
-
--- Function to update egg list
-local function updateEggList()
-    -- Clear existing labels
-    for _, child in pairs(eggScrollFrame:GetChildren()) do
-        if child:IsA("TextLabel") then
-            child:Destroy()
-        end
-    end
-    
-    local eggs = getPlayerGardenEggs(60)
-    local eggCounts = {}
-    
-    -- Count eggs by type
-    for _, egg in ipairs(eggs) do
-        local eggName = egg.Name
-        if eggCounts[eggName] then
-            eggCounts[eggName] = eggCounts[eggName] + 1
-        else
-            eggCounts[eggName] = 1
-        end
-    end
-    
-    -- Update title
-    eggListTitle.Text = "📍 Nearby Eggs (" .. #eggs .. " total)"
-    
-    local yPos = 0
-    for eggName, count in pairs(eggCounts) do
-        local eggLabel = Instance.new("TextLabel")
-        eggLabel.Name = eggName .. "Label"
-        eggLabel.Size = UDim2.new(1, -10, 0, 20)
-        eggLabel.Position = UDim2.new(0, 5, 0, yPos)
-        eggLabel.BackgroundColor3 = Color3.fromRGB(45, 45, 65)
-        eggLabel.BackgroundTransparency = 0.3
-        eggLabel.Text = "• " .. eggName .. " x" .. count
-        eggLabel.TextColor3 = Color3.fromRGB(220, 220, 220)
-        eggLabel.TextSize = 12
-        eggLabel.TextXAlignment = Enum.TextXAlignment.Left
-        eggLabel.Font = Enum.Font.Gotham
-        eggLabel.Parent = eggScrollFrame
-        
-        local labelCorner = Instance.new("UICorner")
-        labelCorner.CornerRadius = UDim.new(0, 4)
-        labelCorner.Parent = eggLabel
-        
-        yPos = yPos + 22
-    end
-    
-    -- Update canvas size
-    eggScrollFrame.CanvasSize = UDim2.new(0, 0, 0, math.max(yPos, 80))
-    
-    if #eggs == 0 then
-        local noEggsLabel = Instance.new("TextLabel")
-        noEggsLabel.Name = "NoEggsLabel"
-        noEggsLabel.Size = UDim2.new(1, -10, 0, 60)
-        noEggsLabel.Position = UDim2.new(0, 5, 0, 10)
-        noEggsLabel.BackgroundTransparency = 1
-        noEggsLabel.Text = "🔍 No eggs found nearby\nMove closer to eggs!"
-        noEggsLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
-        noEggsLabel.TextSize = 12
-        noEggsLabel.TextXAlignment = Enum.TextXAlignment.Center
-        noEggsLabel.TextYAlignment = Enum.TextYAlignment.Center
-        noEggsLabel.Font = Enum.Font.Gotham
-        noEggsLabel.Parent = eggScrollFrame
-    end
-end
-
--- Enhanced randomize button
 local randomizeButton = Instance.new("TextButton")
 randomizeButton.Name = "RandomizeButton"
-randomizeButton.Size = UDim2.new(1, -10, 0, 45)
-randomizeButton.Position = UDim2.new(0, 5, 0, 135)
+randomizeButton.Size = UDim2.new(0, 250, 0, 40)
+randomizeButton.Position = UDim2.new(0.5, -125, 0, 10)
 randomizeButton.BackgroundColor3 = Color3.fromRGB(85, 170, 255)
-randomizeButton.Text = "🎲 Randomize Pets"
+randomizeButton.Text = "Randomize Pets"
 randomizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-randomizeButton.TextSize = 16
-randomizeButton.Font = Enum.Font.GothamBold
-randomizeButton.BorderSizePixel = 0
+randomizeButton.TextSize = 18
+randomizeButton.Font = Enum.Font.FredokaOne
+randomizeButton.BorderSizePixel = 2
+randomizeButton.BorderColor3 = Color3.fromRGB(255, 255, 255)
 randomizeButton.Parent = contentFrame
 
 local randomizeCorner = Instance.new("UICorner")
-randomizeCorner.CornerRadius = UDim.new(0, 10)
+randomizeCorner.CornerRadius = UDim.new(0, 8)
 randomizeCorner.Parent = randomizeButton
 
-local randomizeGradient = Instance.new("UIGradient")
-randomizeGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0.0, Color3.fromRGB(120, 200, 255)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(85, 170, 255)),
-    ColorSequenceKeypoint.new(1.0, Color3.fromRGB(50, 140, 220))
-}
-randomizeGradient.Rotation = 45
-randomizeGradient.Parent = randomizeButton
+local espContainer = Instance.new("Frame")
+espContainer.Name = "ESPContainer"
+espContainer.Size = UDim2.new(0, 250, 0, 30)
+espContainer.Position = UDim2.new(0.5, -125, 0, 60)
+espContainer.BackgroundTransparency = 1
+espContainer.Parent = contentFrame
 
--- Enhanced ESP Toggle button
-local espToggle = Instance.new("TextButton")
-espToggle.Name = "ESPToggle"
-espToggle.Size = UDim2.new(0.48, -2.5, 0, 40)
-espToggle.Position = UDim2.new(0, 5, 0, 190)
-espToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
-espToggle.Text = "👁️ ESP: OFF"
-espToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-espToggle.TextSize = 14
-espToggle.Font = Enum.Font.GothamSemibold
-espToggle.BorderSizePixel = 0
-espToggle.Parent = contentFrame
+local espLabel = Instance.new("TextLabel")
+espLabel.Name = "ESPLabel"
+espLabel.Size = UDim2.new(0, 60, 1, 0)
+espLabel.Position = UDim2.new(0, 0, 0, 0)
+espLabel.BackgroundTransparency = 1
+espLabel.Text = "ESP:"
+espLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+espLabel.TextSize = 14
+espLabel.Font = Enum.Font.GothamSemibold
+espLabel.TextXAlignment = Enum.TextXAlignment.Left
+espLabel.Parent = espContainer
 
-local espCorner = Instance.new("UICorner")
-espCorner.CornerRadius = UDim.new(0, 8)
-espCorner.Parent = espToggle
+local espSwitch = Instance.new("Frame")
+espSwitch.Name = "ESPSwitch"
+espSwitch.Size = UDim2.new(0, 50, 0, 25)
+espSwitch.Position = UDim2.new(0, 70, 0, 2.5)
+espSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+espSwitch.BorderSizePixel = 1
+espSwitch.BorderColor3 = Color3.fromRGB(85, 170, 255)
+espSwitch.Parent = espContainer
 
--- Enhanced Auto Randomize button
-local autoToggle = Instance.new("TextButton")
-autoToggle.Name = "AutoToggle"
-autoToggle.Size = UDim2.new(0.48, -2.5, 0, 40)
-autoToggle.Position = UDim2.new(0.52, 2.5, 0, 190)
-autoToggle.BackgroundColor3 = Color3.fromRGB(80, 150, 60)
-autoToggle.Text = "⚡ Auto: OFF"
-autoToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-autoToggle.TextSize = 14
-autoToggle.Font = Enum.Font.GothamSemibold
-autoToggle.BorderSizePixel = 0
-autoToggle.Parent = contentFrame
+local espSwitchCorner = Instance.new("UICorner")
+espSwitchCorner.CornerRadius = UDim.new(0, 12)
+espSwitchCorner.Parent = espSwitch
 
-local autoCorner = Instance.new("UICorner")
-autoCorner.CornerRadius = UDim.new(0, 8)
-autoCorner.Parent = autoToggle
+local espSwitchButton = Instance.new("TextButton")
+espSwitchButton.Name = "ESPSwitchButton"
+espSwitchButton.Size = UDim2.new(0, 20, 0, 20)
+espSwitchButton.Position = UDim2.new(0, 2.5, 0, 2.5)
+espSwitchButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+espSwitchButton.Text = ""
+espSwitchButton.BorderSizePixel = 0
+espSwitchButton.Parent = espSwitch
 
--- Enhanced status label
-local statusLabel = Instance.new("TextLabel")
-statusLabel.Name = "StatusLabel"
-statusLabel.Size = UDim2.new(1, -10, 0, 50)
-statusLabel.Position = UDim2.new(0, 5, 0, 240)
-statusLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
-statusLabel.BackgroundTransparency = 0.5
-statusLabel.Text = "✅ Ready to randomize!\nMove near eggs to get started."
-statusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-statusLabel.TextSize = 12
-statusLabel.TextXAlignment = Enum.TextXAlignment.Center
-statusLabel.TextYAlignment = Enum.TextYAlignment.Center
-statusLabel.TextWrapped = true
-statusLabel.Font = Enum.Font.Gotham
-statusLabel.Parent = contentFrame
+local espButtonCorner = Instance.new("UICorner")
+espButtonCorner.CornerRadius = UDim.new(0, 10)
+espButtonCorner.Parent = espSwitchButton
 
-local statusCorner = Instance.new("UICorner")
-statusCorner.CornerRadius = UDim.new(0, 8)
-statusCorner.Parent = statusLabel
+local kgContainer = Instance.new("Frame")
+kgContainer.Name = "KGContainer"
+kgContainer.Size = UDim2.new(0, 250, 0, 30)
+kgContainer.Position = UDim2.new(0.5, -125, 0, 95)
+kgContainer.BackgroundTransparency = 1
+kgContainer.Parent = contentFrame
 
--- Enhanced watermark with your requested text
+local kgLabel = Instance.new("TextLabel")
+kgLabel.Name = "KGLabel"
+kgLabel.Size = UDim2.new(0, 120, 1, 0)
+kgLabel.Position = UDim2.new(0, 0, 0, 0)
+kgLabel.BackgroundTransparency = 1
+kgLabel.Text = "Predict KG (beta):"
+kgLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+kgLabel.TextSize = 14
+kgLabel.Font = Enum.Font.GothamSemibold
+kgLabel.TextXAlignment = Enum.TextXAlignment.Left
+kgLabel.Parent = kgContainer
+
+local kgSwitch = Instance.new("Frame")
+kgSwitch.Name = "KGSwitch"
+kgSwitch.Size = UDim2.new(0, 50, 0, 25)
+kgSwitch.Position = UDim2.new(0, 130, 0, 2.5)
+kgSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+kgSwitch.BorderSizePixel = 1
+kgSwitch.BorderColor3 = Color3.fromRGB(85, 170, 255)
+kgSwitch.Parent = kgContainer
+
+local kgSwitchCorner = Instance.new("UICorner")
+kgSwitchCorner.CornerRadius = UDim.new(0, 12)
+kgSwitchCorner.Parent = kgSwitch
+
+local kgSwitchButton = Instance.new("TextButton")
+kgSwitchButton.Name = "KGSwitchButton"
+kgSwitchButton.Size = UDim2.new(0, 20, 0, 20)
+kgSwitchButton.Position = UDim2.new(0, 2.5, 0, 2.5)
+kgSwitchButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+kgSwitchButton.Text = ""
+kgSwitchButton.BorderSizePixel = 0
+kgSwitchButton.Parent = kgSwitch
+
+local kgButtonCorner = Instance.new("UICorner")
+kgButtonCorner.CornerRadius = UDim.new(0, 10)
+kgButtonCorner.Parent = kgSwitchButton
+
+local autoContainer = Instance.new("Frame")
+autoContainer.Name = "AutoContainer"
+autoContainer.Size = UDim2.new(0, 250, 0, 30)
+autoContainer.Position = UDim2.new(0.5, -125, 0, 130)
+autoContainer.BackgroundTransparency = 1
+autoContainer.Parent = contentFrame
+
+local autoLabel = Instance.new("TextLabel")
+autoLabel.Name = "AutoLabel"
+autoLabel.Size = UDim2.new(0, 120, 1, 0)
+autoLabel.Position = UDim2.new(0, 0, 0, 0)
+autoLabel.BackgroundTransparency = 1
+autoLabel.Text = "Auto Randomize:"
+autoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+autoLabel.TextSize = 14
+autoLabel.Font = Enum.Font.GothamSemibold
+autoLabel.TextXAlignment = Enum.TextXAlignment.Left
+autoLabel.Parent = autoContainer
+
+local autoSwitch = Instance.new("Frame")
+autoSwitch.Name = "AutoSwitch"
+autoSwitch.Size = UDim2.new(0, 50, 0, 25)
+autoSwitch.Position = UDim2.new(0, 130, 0, 2.5)
+autoSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+autoSwitch.BorderSizePixel = 1
+autoSwitch.BorderColor3 = Color3.fromRGB(85, 170, 255)
+autoSwitch.Parent = autoContainer
+
+local autoSwitchCorner = Instance.new("UICorner")
+autoSwitchCorner.CornerRadius = UDim.new(0, 12)
+autoSwitchCorner.Parent = autoSwitch
+
+local autoSwitchButton = Instance.new("TextButton")
+autoSwitchButton.Name = "AutoSwitchButton"
+autoSwitchButton.Size = UDim2.new(0, 20, 0, 20)
+autoSwitchButton.Position = UDim2.new(0, 2.5, 0, 2.5)
+autoSwitchButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+autoSwitchButton.Text = ""
+autoSwitchButton.BorderSizePixel = 0
+autoSwitchButton.Parent = autoSwitch
+
+local autoButtonCorner = Instance.new("UICorner")
+autoButtonCorner.CornerRadius = UDim.new(0, 10)
+autoButtonCorner.Parent = autoSwitchButton
+
 local watermark = Instance.new("TextLabel")
 watermark.Name = "Watermark"
-watermark.Size = UDim2.new(1, -10, 0, 30)
-watermark.Position = UDim2.new(0, 5, 1, -40)
-watermark.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
-watermark.BackgroundTransparency = 0.3
-watermark.Text = "by @notjyzee on TikTok | Jyzee Scripts on YouTube"
-watermark.TextColor3 = Color3.fromRGB(120, 120, 140)
+watermark.Size = UDim2.new(1, 0, 0, 15)
+watermark.Position = UDim2.new(0, 0, 1, -15)
+watermark.BackgroundTransparency = 1
+watermark.Text = "Egg Randomizer v1.0"
+watermark.TextColor3 = Color3.fromRGB(120, 120, 120)
 watermark.TextSize = 10
 watermark.TextXAlignment = Enum.TextXAlignment.Center
 watermark.TextYAlignment = Enum.TextYAlignment.Center
 watermark.Font = Enum.Font.GothamSemibold
 watermark.Parent = mainFrame
 
-local watermarkCorner = Instance.new("UICorner")
-watermarkCorner.CornerRadius = UDim.new(0, 6)
-watermarkCorner.Parent = watermark
-
--- Drag functionality
 mainFrame.Active = true
 mainFrame.Draggable = true
 
@@ -655,78 +617,39 @@ titleBar.InputEnded:Connect(function(input)
     end
 end)
 
--- Enhanced button interactions with better animations
-local function createButtonHoverEffect(button, normalColor, hoverColor)
-    button.MouseEnter:Connect(function()
-        TweenService:Create(button, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = hoverColor,
-            Size = button.Size + UDim2.new(0, 2, 0, 1)
-        }):Play()
-    end)
+randomizeButton.MouseEnter:Connect(function()
+    TweenService:Create(randomizeButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 185, 255)}):Play()
+end)
 
-    button.MouseLeave:Connect(function()
-        TweenService:Create(button, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = normalColor,
-            Size = button.Size - UDim2.new(0, 2, 0, 1)
-        }):Play()
-    end)
-end
-
--- Apply hover effects
-createButtonHoverEffect(randomizeButton, Color3.fromRGB(85, 170, 255), Color3.fromRGB(100, 185, 255))
-createButtonHoverEffect(espToggle, Color3.fromRGB(60, 60, 80), Color3.fromRGB(75, 75, 95))
-createButtonHoverEffect(autoToggle, Color3.fromRGB(80, 150, 60), Color3.fromRGB(95, 165, 75))
+randomizeButton.MouseLeave:Connect(function()
+    TweenService:Create(randomizeButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(85, 170, 255)}):Play()
+end)
 
 closeButton.MouseEnter:Connect(function()
-    TweenService:Create(closeButton, TweenInfo.new(0.2), {
-        BackgroundColor3 = Color3.fromRGB(255, 100, 100),
-        Size = UDim2.new(0, 32, 0, 32)
-    }):Play()
+    TweenService:Create(closeButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(220, 80, 100)}):Play()
 end)
 
 closeButton.MouseLeave:Connect(function()
-    TweenService:Create(closeButton, TweenInfo.new(0.2), {
-        BackgroundColor3 = Color3.fromRGB(255, 80, 80),
-        Size = UDim2.new(0, 30, 0, 30)
-    }):Play()
+    TweenService:Create(closeButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(200, 60, 80)}):Play()
 end)
 
--- Button functionality
 local isRandomizing = false
-local isToggling = false
-local autoRunning = false
-local isAutoProcessing = false
 
-randomizeButton.MouseButton1Click:Connect(function()
-    if isRandomizing then return end
-    isRandomizing = true
-    randomizeButton.Active = false
-    espToggle.Active = false
-    autoToggle.Active = false
-    statusLabel.Text = "🎲 Starting randomization..."
-    randomizeButton.Text = "🔄 Randomizing..."
-    
-    local count = randomizeNearbyEggs()
-    randomizeButton.Text = "✅ Randomized "..count.." Pets!"
-    statusLabel.Text = "✅ Randomized "..count.." pets!\nCheck your eggs now!"
-    wait(2)
-    
-    randomizeButton.Text = "🎲 Randomize Pets"
-    statusLabel.Text = "✅ Ready to randomize!\nMove near eggs to get started."
-    randomizeButton.Active = true
-    espToggle.Active = true
-    autoToggle.Active = true
-    isRandomizing = false
-end)
+local function toggleSwitch(switchFrame, switchButton, enabled, onColor, offColor)
+    if enabled then
+        TweenService:Create(switchButton, TweenInfo.new(0.2), {Position = UDim2.new(0, 27.5, 0, 2.5)}):Play()
+        TweenService:Create(switchFrame, TweenInfo.new(0.2), {BackgroundColor3 = onColor}):Play()
+        TweenService:Create(switchButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+    else
+        TweenService:Create(switchButton, TweenInfo.new(0.2), {Position = UDim2.new(0, 2.5, 0, 2.5)}):Play()
+        TweenService:Create(switchFrame, TweenInfo.new(0.2), {BackgroundColor3 = offColor}):Play()
+        TweenService:Create(switchButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(200, 200, 200)}):Play()
+    end
+end
 
-espToggle.MouseButton1Click:Connect(function()
-    if isToggling then return end
-    isToggling = true
-    espToggle.Active = false
-    
+espSwitchButton.MouseButton1Click:Connect(function()
     espEnabled = not espEnabled
-    espToggle.Text = espEnabled and "👁️ ESP: ON" or "👁️ ESP: OFF"
-    espToggle.BackgroundColor3 = espEnabled and Color3.fromRGB(60, 150, 60) or Color3.fromRGB(60, 60, 80)
+    toggleSwitch(espSwitch, espSwitchButton, espEnabled, Color3.fromRGB(85, 170, 255), Color3.fromRGB(60, 60, 70))
     
     if espEnabled then
         local eggs = getPlayerGardenEggs(60)
@@ -734,138 +657,96 @@ espToggle.MouseButton1Click:Connect(function()
             applyEggESP(egg)
         end
     else
-        removeAllESP()
+        if not kgEnabled then
+            removeAllESP()
+        else
+            for eggModel, _ in pairs(trackedEggs) do
+                removeEggESP(eggModel)
+                applyEggESP(eggModel)
+            end
+        end
     end
-    
-    statusLabel.Text = "👁️ ESP " .. (espEnabled and "enabled" or "disabled") .. "!\n" .. (espEnabled and "Eggs are now highlighted." or "Highlights removed.")
-    wait(1)
-    statusLabel.Text = "✅ Ready to randomize!\nMove near eggs to get started."
-    espToggle.Active = true
-    isToggling = false
 end)
 
-autoToggle.MouseButton1Click:Connect(function()
-    if isAutoProcessing then return end
-    isAutoProcessing = true
+kgSwitchButton.MouseButton1Click:Connect(function()
+    kgEnabled = not kgEnabled
+    toggleSwitch(kgSwitch, kgSwitchButton, kgEnabled, Color3.fromRGB(255, 215, 0), Color3.fromRGB(60, 60, 70))
     
-    autoRunning = not autoRunning
-    autoToggle.Text = autoRunning and "⚡ Auto: ON" or "⚡ Auto: OFF"
-    autoToggle.BackgroundColor3 = autoRunning and Color3.fromRGB(150, 80, 60) or Color3.fromRGB(80, 150, 60)
-    statusLabel.Text = autoRunning and "⚡ Auto-randomize started!\nSearching for rare pets..." or "⏹️ Auto-randomize stopped"
+    if kgEnabled then
+        local eggs = getPlayerGardenEggs(60)
+        for _, egg in pairs(eggs) do
+            applyEggESP(egg)
+        end
+    else
+        if not espEnabled then
+            removeAllESP()
+        else
+            for eggModel, _ in pairs(trackedEggs) do
+                removeEggESP(eggModel)
+                applyEggESP(eggModel)
+            end
+        end
+    end
+end)
 
-    if autoRunning then
-        randomizeButton.Active = false
-        espToggle.Active = false
-        autoToggle.Active = false
+autoSwitchButton.MouseButton1Click:Connect(function()
+    autoRandomize = not autoRandomize
+    toggleSwitch(autoSwitch, autoSwitchButton, autoRandomize, Color3.fromRGB(80, 150, 60), Color3.fromRGB(60, 60, 70))
+end)
 
+randomizeButton.MouseButton1Click:Connect(function()
+    if isRandomizing then return end
+    isRandomizing = true
+    randomizeButton.Active = false
+    randomizeButton.Text = "Randomizing..."
+    
+    if autoRandomize then
         spawn(function()
-            while autoRunning do
-                statusLabel.Text = "⚡ Auto-randomizing...\nSearching for rare pets..."
-                randomizeButton.Text = "🔄 Auto Randomizing..."
+            while autoRandomize and isRandomizing do
                 local count = randomizeNearbyEggs()
-                randomizeButton.Text = "✅ Randomized "..count.." Pets!"
-                statusLabel.Text = "✅ Randomized "..count.." pets!\nChecking for rare pets..."
-
+                randomizeButton.Text = "Randomized "..count.." Pets!"
+                
                 local foundRare = false
-                local rarePetFound = ""
                 for _, petName in pairs(truePetMap) do
                     if rarePets[petName] then
                         foundRare = true
-                        rarePetFound = petName
-                        statusLabel.Text = "🌟 RARE PET FOUND: " .. petName .. "!\nAuto-randomize stopped!"
-                        autoRunning = false
-                        autoToggle.Text = "⚡ Auto: OFF"
-                        autoToggle.BackgroundColor3 = Color3.fromRGB(80, 150, 60)
+                        randomizeButton.Text = "Found Rare: "..petName
+                        autoRandomize = false
+                        toggleSwitch(autoSwitch, autoSwitchButton, false, Color3.fromRGB(80, 150, 60), Color3.fromRGB(60, 60, 70))
                         break
                     end
                 end
-
+                
+                if foundRare then break end
                 wait(2)
-                if foundRare then
-                    randomizeButton.Text = "🎲 Randomize Pets"
-                else
-                    randomizeButton.Text = "🎲 Randomize Pets"
-                    if autoRunning then
-                        statusLabel.Text = "⚡ Auto-randomize running...\nSearching for rare pets..."
-                    end
-                end
-                wait(1)
             end
+            randomizeButton.Text = "Randomize Pets"
             randomizeButton.Active = true
-            espToggle.Active = true
-            autoToggle.Active = true
-            isAutoProcessing = false
+            isRandomizing = false
         end)
     else
-        isAutoProcessing = false
+        local count = randomizeNearbyEggs()
+        randomizeButton.Text = "Randomized "..count.." Pets!"
+        wait(1.5)
+        randomizeButton.Text = "Randomize Pets"
+        randomizeButton.Active = true
+        isRandomizing = false
     end
 end)
 
 closeButton.MouseButton1Click:Connect(function()
-    -- Smooth close animation
-    TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
-        Size = UDim2.new(0, 0, 0, 0),
-        Position = UDim2.new(0.5, 0, 0.5, 0)
-    }):Play()
-    wait(0.3)
     screenGui:Destroy()
 end)
 
--- Real-time egg list updater
-local lastUpdateTime = 0
-local updateConnection
-
-updateConnection = RunService.Heartbeat:Connect(function()
-    local currentTime = tick()
-    if currentTime - lastUpdateTime >= 1 then -- Update every second
-        updateEggList()
-        lastUpdateTime = currentTime
-    end
-end)
-
--- Initialize with smooth entrance animation
 spawn(function()
-    -- Start small and grow
-    mainFrame.Size = UDim2.new(0, 0, 0, 0)
-    mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-    
-    TweenService:Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Size = UDim2.new(0, 350, 0, 450),
-        Position = UDim2.new(0.5, -175, 0.5, -225)
-    }):Play()
-    
-    wait(0.5)
-    updateEggList()
-    
     wait(1)
     local eggs = getPlayerGardenEggs(60)
     for _, egg in pairs(eggs) do
         if not truePetMap[egg] then
             truePetMap[egg] = selectPetForEgg(egg.Name)
         end
-        if espEnabled then
+        if espEnabled or kgEnabled then
             applyEggESP(egg)
         end
-    end
-    
-    if #eggs == 0 then
-        statusLabel.Text = "🔍 No eggs found nearby\nMove closer to some eggs!"
-    else
-        statusLabel.Text = "✅ Found " .. #eggs .. " eggs nearby!\nReady to randomize!"
-    end
-end)
-
--- Cleanup function
-local function cleanup()
-    if updateConnection then
-        updateConnection:Disconnect()
-    end
-    removeAllESP()
-end
-
--- Connect cleanup to GUI destruction
-screenGui.AncestryChanged:Connect(function()
-    if not screenGui.Parent then
-        cleanup()
     end
 end)
