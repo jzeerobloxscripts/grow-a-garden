@@ -13,13 +13,14 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "JzeeMenuGUI"
 screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.DisplayOrder = 9999999
 screenGui.Parent = playerGui
 
--- Main Frame (4:3 aspect ratio)
+-- Main Frame (Mobile landscape optimized)
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 800, 0, 600)
-mainFrame.Position = UDim2.new(0.5, -400, 0.5, -300)
+mainFrame.Size = UDim2.new(0, 480, 0, 320)
+mainFrame.Position = UDim2.new(0.5, -240, 0.5, -160)
 mainFrame.BackgroundColor3 = Color3.fromRGB(42, 42, 42)
 mainFrame.BorderSizePixel = 0
 mainFrame.Active = true
@@ -57,7 +58,7 @@ shadowCorner.Parent = shadow
 -- Header Frame
 local headerFrame = Instance.new("Frame")
 headerFrame.Name = "HeaderFrame"
-headerFrame.Size = UDim2.new(1, 0, 0, 70)
+headerFrame.Size = UDim2.new(1, 0, 0, 50)
 headerFrame.Position = UDim2.new(0, 0, 0, 0)
 headerFrame.BackgroundColor3 = Color3.fromRGB(51, 51, 51)
 headerFrame.BorderSizePixel = 0
@@ -74,8 +75,8 @@ headerGradient.Parent = headerFrame
 -- Profile Frame (Top Left)
 local profileFrame = Instance.new("Frame")
 profileFrame.Name = "ProfileFrame"
-profileFrame.Size = UDim2.new(0, 40, 0, 40)
-profileFrame.Position = UDim2.new(0, 15, 0.5, -20)
+profileFrame.Size = UDim2.new(0, 30, 0, 30)
+profileFrame.Position = UDim2.new(0, 10, 0.5, -15)
 profileFrame.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
 profileFrame.BorderSizePixel = 0
 profileFrame.Parent = headerFrame
@@ -106,10 +107,10 @@ profileText.Parent = profileFrame
 -- Animated Text (Beside Profile)
 local animatedText = Instance.new("TextLabel")
 animatedText.Name = "AnimatedText"
-animatedText.Size = UDim2.new(0, 120, 0, 40)
-animatedText.Position = UDim2.new(0, 70, 0.5, -20)
+animatedText.Size = UDim2.new(0, 80, 0, 30)
+animatedText.Position = UDim2.new(0, 50, 0.5, -15)
 animatedText.BackgroundTransparency = 1
-animatedText.Text = "Welcome back!"
+animatedText.Text = "asjfhdjsdjfsadfks"
 animatedText.TextColor3 = Color3.fromRGB(99, 102, 241)
 animatedText.TextScaled = true
 animatedText.Font = Enum.Font.Gotham
@@ -118,8 +119,8 @@ animatedText.Parent = headerFrame
 -- Title (Center)
 local titleText = Instance.new("TextLabel")
 titleText.Name = "TitleText"
-titleText.Size = UDim2.new(0, 300, 0, 40)
-titleText.Position = UDim2.new(0.5, -150, 0.5, -20)
+titleText.Size = UDim2.new(0, 200, 0, 30)
+titleText.Position = UDim2.new(0.5, -100, 0.5, -15)
 titleText.BackgroundTransparency = 1
 titleText.Text = "Roblox Menu Game GUI"
 titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -130,16 +131,16 @@ titleText.Parent = headerFrame
 -- Control Buttons Frame (Top Right)
 local controlsFrame = Instance.new("Frame")
 controlsFrame.Name = "ControlsFrame"
-controlsFrame.Size = UDim2.new(0, 80, 0, 40)
-controlsFrame.Position = UDim2.new(1, -95, 0.5, -20)
+controlsFrame.Size = UDim2.new(0, 60, 0, 30)
+controlsFrame.Position = UDim2.new(1, -70, 0.5, -15)
 controlsFrame.BackgroundTransparency = 1
 controlsFrame.Parent = headerFrame
 
 -- Minimize Button
 local minimizeBtn = Instance.new("TextButton")
 minimizeBtn.Name = "MinimizeBtn"
-minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
-minimizeBtn.Position = UDim2.new(0, 0, 0.5, -15)
+minimizeBtn.Size = UDim2.new(0, 25, 0, 25)
+minimizeBtn.Position = UDim2.new(0, 0, 0.5, -12.5)
 minimizeBtn.BackgroundColor3 = Color3.fromRGB(251, 191, 36)
 minimizeBtn.BorderSizePixel = 0
 minimizeBtn.Text = "−"
@@ -163,8 +164,8 @@ minimizeGradient.Parent = minimizeBtn
 -- Close Button
 local closeBtn = Instance.new("TextButton")
 closeBtn.Name = "CloseBtn"
-closeBtn.Size = UDim2.new(0, 30, 0, 30)
-closeBtn.Position = UDim2.new(0, 40, 0.5, -15)
+closeBtn.Size = UDim2.new(0, 25, 0, 25)
+closeBtn.Position = UDim2.new(0, 30, 0.5, -12.5)
 closeBtn.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
 closeBtn.BorderSizePixel = 0
 closeBtn.Text = "×"
@@ -188,8 +189,8 @@ closeGradient.Parent = closeBtn
 -- Content Frame
 local contentFrame = Instance.new("Frame")
 contentFrame.Name = "ContentFrame"
-contentFrame.Size = UDim2.new(1, -40, 1, -160)
-contentFrame.Position = UDim2.new(0, 20, 0, 90)
+contentFrame.Size = UDim2.new(1, -20, 1, -90)
+contentFrame.Position = UDim2.new(0, 10, 0, 60)
 contentFrame.BackgroundTransparency = 1
 contentFrame.Parent = mainFrame
 
@@ -206,7 +207,7 @@ scrollFrame.Parent = contentFrame
 
 local listLayout = Instance.new("UIListLayout")
 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-listLayout.Padding = UDim.new(0, 15)
+listLayout.Padding = UDim.new(0, 8)
 listLayout.Parent = scrollFrame
 
 -- Menu Items Data
@@ -223,14 +224,14 @@ local menuItems = {
 for i, item in pairs(menuItems) do
     local menuItem = Instance.new("Frame")
     menuItem.Name = "MenuItem" .. i
-    menuItem.Size = UDim2.new(1, 0, 0, 70)
+    menuItem.Size = UDim2.new(1, 0, 0, 50)
     menuItem.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
     menuItem.BorderSizePixel = 0
     menuItem.LayoutOrder = i
     menuItem.Parent = scrollFrame
     
     local itemCorner = Instance.new("UICorner")
-    itemCorner.CornerRadius = UDim.new(0, 12)
+    itemCorner.CornerRadius = UDim.new(0, 8)
     itemCorner.Parent = menuItem
     
     local itemGradient = Instance.new("UIGradient")
@@ -244,14 +245,14 @@ for i, item in pairs(menuItems) do
     -- Icon Frame
     local iconFrame = Instance.new("Frame")
     iconFrame.Name = "IconFrame"
-    iconFrame.Size = UDim2.new(0, 40, 0, 40)
-    iconFrame.Position = UDim2.new(0, 20, 0.5, -20)
+    iconFrame.Size = UDim2.new(0, 30, 0, 30)
+    iconFrame.Position = UDim2.new(0, 10, 0.5, -15)
     iconFrame.BackgroundColor3 = item.color
     iconFrame.BorderSizePixel = 0
     iconFrame.Parent = menuItem
     
     local iconCorner = Instance.new("UICorner")
-    iconCorner.CornerRadius = UDim.new(0, 10)
+    iconCorner.CornerRadius = UDim.new(0, 6)
     iconCorner.Parent = iconFrame
     
     local iconText = Instance.new("TextLabel")
@@ -268,8 +269,8 @@ for i, item in pairs(menuItems) do
     -- Menu Text
     local menuText = Instance.new("TextLabel")
     menuText.Name = "MenuText"
-    menuText.Size = UDim2.new(1, -120, 1, 0)
-    menuText.Position = UDim2.new(0, 80, 0, 0)
+    menuText.Size = UDim2.new(1, -80, 1, 0)
+    menuText.Position = UDim2.new(0, 50, 0, 0)
     menuText.BackgroundTransparency = 1
     menuText.Text = item.text
     menuText.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -281,8 +282,8 @@ for i, item in pairs(menuItems) do
     -- Arrow
     local arrow = Instance.new("TextLabel")
     arrow.Name = "Arrow"
-    arrow.Size = UDim2.new(0, 30, 1, 0)
-    arrow.Position = UDim2.new(1, -40, 0, 0)
+    arrow.Size = UDim2.new(0, 20, 1, 0)
+    arrow.Position = UDim2.new(1, -25, 0, 0)
     arrow.BackgroundTransparency = 1
     arrow.Text = "›"
     arrow.TextColor3 = Color3.fromRGB(136, 136, 136)
@@ -322,8 +323,8 @@ end
 -- Watermark
 local watermark = Instance.new("TextLabel")
 watermark.Name = "Watermark"
-watermark.Size = UDim2.new(1, 0, 0, 40)
-watermark.Position = UDim2.new(0, 0, 1, -40)
+watermark.Size = UDim2.new(1, 0, 0, 30)
+watermark.Position = UDim2.new(0, 0, 1, -30)
 watermark.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 watermark.BorderSizePixel = 0
 watermark.Text = "by Jzee Scripts (@notjzee) YouTube & TikTok"
@@ -332,44 +333,28 @@ watermark.TextScaled = true
 watermark.Font = Enum.Font.Gotham
 watermark.Parent = mainFrame
 
--- Animated Text System
-local textOptions = {
-    "Welcome back!",
-    "Ready to script?",
-    "Let's get started",
-    "System online",
-    "Scripts loaded",
-    "GUI active",
-    "Menu ready",
-    "All systems go"
-}
+-- Animated Text System (Glitch Effect)
+local glitchChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?"
+local targetLength = 15
 
-local currentIndex = 1
-local function updateAnimatedText()
-    local tween = TweenService:Create(animatedText, TweenInfo.new(0.3), {
-        TextTransparency = 1
-    })
-    tween:Play()
-    
-    tween.Completed:Connect(function()
-        animatedText.Text = textOptions[currentIndex]
-        currentIndex = currentIndex + 1
-        if currentIndex > #textOptions then
-            currentIndex = 1
-        end
-        
-        local fadeIn = TweenService:Create(animatedText, TweenInfo.new(0.3), {
-            TextTransparency = 0
-        })
-        fadeIn:Play()
-    end)
+local function generateGlitchText()
+    local result = ""
+    for i = 1, targetLength do
+        local randomIndex = math.random(1, #glitchChars)
+        result = result .. string.sub(glitchChars, randomIndex, randomIndex)
+    end
+    return result
 end
 
--- Start text animation
+local function updateGlitchText()
+    animatedText.Text = generateGlitchText()
+end
+
+-- Start glitch animation (faster updates for glitch effect)
 spawn(function()
     while true do
-        wait(2)
-        updateAnimatedText()
+        wait(0.1) -- Update every 0.1 seconds for rapid glitching
+        updateGlitchText()
     end
 end)
 
@@ -381,17 +366,17 @@ minimizeBtn.MouseButton1Click:Connect(function()
     
     if isMinimized then
         local tween = TweenService:Create(mainFrame, TweenInfo.new(0.3), {
-            Size = UDim2.new(0, 200, 0, 60)
+            Size = UDim2.new(0, 150, 0, 40)
         })
         tween:Play()
         
         contentFrame.Visible = false
         watermark.Visible = false
         titleText.TextScaled = false
-        titleText.TextSize = 14
+        titleText.TextSize = 12
     else
         local tween = TweenService:Create(mainFrame, TweenInfo.new(0.3), {
-            Size = UDim2.new(0, 800, 0, 600)
+            Size = UDim2.new(0, 480, 0, 320)
         })
         tween:Play()
         
@@ -418,33 +403,33 @@ end)
 -- Button Hover Effects
 minimizeBtn.MouseEnter:Connect(function()
     local tween = TweenService:Create(minimizeBtn, TweenInfo.new(0.2), {
-        Size = UDim2.new(0, 33, 0, 33)
+        Size = UDim2.new(0, 28, 0, 28)
     })
     tween:Play()
 end)
 
 minimizeBtn.MouseLeave:Connect(function()
     local tween = TweenService:Create(minimizeBtn, TweenInfo.new(0.2), {
-        Size = UDim2.new(0, 30, 0, 30)
+        Size = UDim2.new(0, 25, 0, 25)
     })
     tween:Play()
 end)
 
 closeBtn.MouseEnter:Connect(function()
     local tween = TweenService:Create(closeBtn, TweenInfo.new(0.2), {
-        Size = UDim2.new(0, 33, 0, 33)
+        Size = UDim2.new(0, 28, 0, 28)
     })
     tween:Play()
 end)
 
 closeBtn.MouseLeave:Connect(function()
     local tween = TweenService:Create(closeBtn, TweenInfo.new(0.2), {
-        Size = UDim2.new(0, 30, 0, 30)
+        Size = UDim2.new(0, 25, 0, 25)
     })
     tween:Play()
 end)
 
 -- Update scroll frame size
-scrollFrame.CanvasSize = UDim2.new(0, 0, 0, (#menuItems * 85) + 50)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, (#menuItems * 58) + 30)
 
 print("Jzee Menu GUI Loaded Successfully!")
