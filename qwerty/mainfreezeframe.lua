@@ -9,10 +9,28 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "FreezeTradeGUI"
 screenGui.Parent = playerGui
 
+-- Minimized icon
+local minimizedIcon = Instance.new("TextButton")
+minimizedIcon.Name = "MinimizedIcon"
+minimizedIcon.Size = UDim2.new(0, 60, 0, 30)
+minimizedIcon.Position = UDim2.new(0, 20, 0, 100)
+minimizedIcon.BackgroundColor3 = Color3.fromRGB(85, 170, 255)
+minimizedIcon.Text = "FT"
+minimizedIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizedIcon.TextScaled = true
+minimizedIcon.Font = Enum.Font.FredokaOne
+minimizedIcon.BorderSizePixel = 0
+minimizedIcon.Visible = false
+minimizedIcon.Parent = screenGui
+
+local iconCorner = Instance.new("UICorner")
+iconCorner.CornerRadius = UDim.new(0, 8)
+iconCorner.Parent = minimizedIcon
+
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 400, 0, 380)
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -190)
+mainFrame.Size = UDim2.new(0, 400, 0, 350)
+mainFrame.Position = UDim2.new(0.5, -200, 0.5, -175)
 mainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 55)
 mainFrame.BorderSizePixel = 2
 mainFrame.BorderColor3 = Color3.fromRGB(85, 170, 255)
@@ -57,15 +75,49 @@ titleFix.Parent = titleBar
 
 local titleText = Instance.new("TextLabel")
 titleText.Name = "TitleText"
-titleText.Size = UDim2.new(1, -20, 1, 0)
+titleText.Size = UDim2.new(1, -80, 1, 0)
 titleText.Position = UDim2.new(0, 10, 0, 0)
 titleText.BackgroundTransparency = 1
 titleText.Text = "Freeze Trade"
 titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleText.TextScaled = true
-titleText.TextXAlignment = Enum.TextXAlignment.Center
+titleText.TextXAlignment = Enum.TextXAlignment.Left
 titleText.Font = Enum.Font.FredokaOne
 titleText.Parent = titleBar
+
+-- Minimize button
+local minimizeBtn = Instance.new("TextButton")
+minimizeBtn.Name = "MinimizeButton"
+minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
+minimizeBtn.Position = UDim2.new(1, -65, 0, 5)
+minimizeBtn.BackgroundColor3 = Color3.fromRGB(255, 193, 7)
+minimizeBtn.Text = "—"
+minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeBtn.TextScaled = true
+minimizeBtn.Font = Enum.Font.GothamBold
+minimizeBtn.BorderSizePixel = 0
+minimizeBtn.Parent = titleBar
+
+local minimizeBtnCorner = Instance.new("UICorner")
+minimizeBtnCorner.CornerRadius = UDim.new(0, 6)
+minimizeBtnCorner.Parent = minimizeBtn
+
+-- Close button
+local closeBtn = Instance.new("TextButton")
+closeBtn.Name = "CloseButton"
+closeBtn.Size = UDim2.new(0, 30, 0, 30)
+closeBtn.Position = UDim2.new(1, -30, 0, 5)
+closeBtn.BackgroundColor3 = Color3.fromRGB(220, 53, 69)
+closeBtn.Text = "✕"
+closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeBtn.TextScaled = true
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.BorderSizePixel = 0
+closeBtn.Parent = titleBar
+
+local closeBtnCorner = Instance.new("UICorner")
+closeBtnCorner.CornerRadius = UDim.new(0, 6)
+closeBtnCorner.Parent = closeBtn
 
 local dropdown = Instance.new("TextButton")
 dropdown.Name = "Dropdown"
@@ -124,63 +176,74 @@ end
 local function updatePlayerList()
     -- Clear existing options
     for _, option in pairs(playerOptions) do
-        option:Destroy()
+        if option and option.Parent then
+            option:Destroy()
+        end
     end
     playerOptions = {}
     
-    local players = Players:GetPlayers()
-    for i, plr in ipairs(players) do
-        if plr ~= player then -- Don't include local player
-            local option = Instance.new("TextButton")
-            option.Size = UDim2.new(1, 0, 0, 30)
-            option.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
-            option.Text = ""
-            option.BorderSizePixel = 0
-            option.ZIndex = 102
-            option.Parent = scrollFrame
-            
-            -- Player thumbnail
-            local thumbnail = Instance.new("ImageLabel")
-            thumbnail.Size = UDim2.new(0, 25, 0, 25)
-            thumbnail.Position = UDim2.new(0, 5, 0.5, -12.5)
-            thumbnail.BackgroundTransparency = 1
-            thumbnail.Image = getPlayerThumbnail(plr.UserId)
-            thumbnail.Parent = option
-            
-            local thumbCorner = Instance.new("UICorner")
-            thumbCorner.CornerRadius = UDim.new(0, 4)
-            thumbCorner.Parent = thumbnail
-            
-            -- Player name text
-            local nameText = Instance.new("TextLabel")
-            nameText.Size = UDim2.new(1, -40, 1, 0)
-            nameText.Position = UDim2.new(0, 35, 0, 0)
-            nameText.BackgroundTransparency = 1
-            nameText.Text = plr.DisplayName .. " (@" .. plr.Name .. ")"
-            nameText.TextColor3 = Color3.fromRGB(255, 255, 255)
-            nameText.TextSize = 12
-            nameText.Font = Enum.Font.FredokaOne
-            nameText.TextXAlignment = Enum.TextXAlignment.Left
-            nameText.Parent = option
-            
-            option.MouseEnter:Connect(function()
-                option.BackgroundColor3 = Color3.fromRGB(85, 170, 255)
-            end)
-            
-            option.MouseLeave:Connect(function()
-                option.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
-            end)
-            
-            option.MouseButton1Click:Connect(function()
-                selectedPlayer = plr
-                dropdown.Text = plr.DisplayName .. " ▼"
-                dropdownList.Visible = false
-                TweenService:Create(dropdownList, TweenInfo.new(0.2), {Size = UDim2.new(0, 280, 0, 0)}):Play()
-                updatePlayerInfo()
-            end)
-            
-            table.insert(playerOptions, option)
+    local allPlayers = Players:GetPlayers()
+    local otherPlayers = {}
+    
+    -- Filter out the local player
+    for _, plr in pairs(allPlayers) do
+        if plr ~= player then
+            table.insert(otherPlayers, plr)
         end
+    end
+    
+    print("Found " .. #otherPlayers .. " other players") -- Debug print
+    
+    for i, plr in ipairs(otherPlayers) do
+        local option = Instance.new("TextButton")
+        option.Size = UDim2.new(1, 0, 0, 30)
+        option.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+        option.Text = ""
+        option.BorderSizePixel = 0
+        option.ZIndex = 102
+        option.Parent = scrollFrame
+        
+        -- Player thumbnail
+        local thumbnail = Instance.new("ImageLabel")
+        thumbnail.Size = UDim2.new(0, 25, 0, 25)
+        thumbnail.Position = UDim2.new(0, 5, 0.5, -12.5)
+        thumbnail.BackgroundTransparency = 1
+        thumbnail.Image = getPlayerThumbnail(plr.UserId)
+        thumbnail.Parent = option
+        
+        local thumbCorner = Instance.new("UICorner")
+        thumbCorner.CornerRadius = UDim.new(0, 4)
+        thumbCorner.Parent = thumbnail
+        
+        -- Player name text
+        local nameText = Instance.new("TextLabel")
+        nameText.Size = UDim2.new(1, -40, 1, 0)
+        nameText.Position = UDim2.new(0, 35, 0, 0)
+        nameText.BackgroundTransparency = 1
+        nameText.Text = plr.DisplayName .. " (@" .. plr.Name .. ")"
+        nameText.TextColor3 = Color3.fromRGB(255, 255, 255)
+        nameText.TextSize = 12
+        nameText.Font = Enum.Font.FredokaOne
+        nameText.TextXAlignment = Enum.TextXAlignment.Left
+        nameText.Parent = option
+        
+        option.MouseEnter:Connect(function()
+            option.BackgroundColor3 = Color3.fromRGB(85, 170, 255)
+        end)
+        
+        option.MouseLeave:Connect(function()
+            option.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+        end)
+        
+        option.MouseButton1Click:Connect(function()
+            selectedPlayer = plr
+            dropdown.Text = plr.DisplayName .. " ▼"
+            dropdownList.Visible = false
+            TweenService:Create(dropdownList, TweenInfo.new(0.2), {Size = UDim2.new(0, 280, 0, 0)}):Play()
+            updatePlayerInfo()
+        end)
+        
+        table.insert(playerOptions, option)
     end
     
     scrollFrame.CanvasSize = UDim2.new(0, 0, 0, #playerOptions * 30)
@@ -193,11 +256,12 @@ dropdown.MouseButton1Click:Connect(function()
     else
         updatePlayerList()
         dropdownList.Visible = true
-        TweenService:Create(dropdownList, TweenInfo.new(0.2), {Size = UDim2.new(0, 280, 0, math.min(#playerOptions * 30, 120))}):Play()
+        local maxHeight = math.min(#playerOptions * 30, 120)
+        TweenService:Create(dropdownList, TweenInfo.new(0.2), {Size = UDim2.new(0, 280, 0, maxHeight)}):Play()
     end
 end)
 
--- Player info section
+-- Player info section (only target player)
 local playerInfoFrame = Instance.new("Frame")
 playerInfoFrame.Name = "PlayerInfoFrame"
 playerInfoFrame.Size = UDim2.new(1, -20, 0, 80)
@@ -211,45 +275,11 @@ local infoCorner = Instance.new("UICorner")
 infoCorner.CornerRadius = UDim.new(0, 6)
 infoCorner.Parent = playerInfoFrame
 
--- Local player info (left side)
-local localPlayerThumb = Instance.new("ImageLabel")
-localPlayerThumb.Size = UDim2.new(0, 50, 0, 50)
-localPlayerThumb.Position = UDim2.new(0, 10, 0, 5)
-localPlayerThumb.BackgroundTransparency = 1
-localPlayerThumb.Image = getPlayerThumbnail(player.UserId)
-localPlayerThumb.Parent = playerInfoFrame
-
-local localThumbCorner = Instance.new("UICorner")
-localThumbCorner.CornerRadius = UDim.new(0, 6)
-localThumbCorner.Parent = localPlayerThumb
-
-local localDisplayName = Instance.new("TextLabel")
-localDisplayName.Size = UDim2.new(0, 120, 0, 12)
-localDisplayName.Position = UDim2.new(0, 10, 0, 58)
-localDisplayName.BackgroundTransparency = 1
-localDisplayName.Text = "Display Name: " .. player.DisplayName
-localDisplayName.TextColor3 = Color3.fromRGB(255, 255, 255)
-localDisplayName.TextSize = 10
-localDisplayName.Font = Enum.Font.GothamSemibold
-localDisplayName.TextXAlignment = Enum.TextXAlignment.Left
-localDisplayName.Parent = playerInfoFrame
-
-local localUsername = Instance.new("TextLabel")
-localUsername.Size = UDim2.new(0, 120, 0, 12)
-localUsername.Position = UDim2.new(0, 10, 0, 68)
-localUsername.BackgroundTransparency = 1
-localUsername.Text = "Username: @" .. player.Name
-localUsername.TextColor3 = Color3.fromRGB(200, 200, 200)
-localUsername.TextSize = 10
-localUsername.Font = Enum.Font.GothamSemibold
-localUsername.TextXAlignment = Enum.TextXAlignment.Left
-localUsername.Parent = playerInfoFrame
-
--- Target player info (right side)
+-- Target player info (centered)
 local targetPlayerThumb = Instance.new("ImageLabel")
-targetPlayerThumb.Size = UDim2.new(0, 50, 0, 50)
-targetPlayerThumb.Position = UDim2.new(1, -60, 0, 5)
-targetPlayerThumb.BackgroundTransparency = 1
+targetPlayerThumb.Size = UDim2.new(0, 60, 0, 60)
+targetPlayerThumb.Position = UDim2.new(0.5, -30, 0, 10)
+targetPlayerThumb.BackgroundColor3 = Color3.fromRGB(80, 80, 90)
 targetPlayerThumb.Image = ""
 targetPlayerThumb.Parent = playerInfoFrame
 
@@ -257,38 +287,50 @@ local targetThumbCorner = Instance.new("UICorner")
 targetThumbCorner.CornerRadius = UDim.new(0, 6)
 targetThumbCorner.Parent = targetPlayerThumb
 
+-- Placeholder text for thumbnail
+local placeholderText = Instance.new("TextLabel")
+placeholderText.Size = UDim2.new(1, 0, 1, 0)
+placeholderText.BackgroundTransparency = 1
+placeholderText.Text = "?"
+placeholderText.TextColor3 = Color3.fromRGB(150, 150, 150)
+placeholderText.TextScaled = true
+placeholderText.Font = Enum.Font.GothamBold
+placeholderText.Parent = targetPlayerThumb
+
 local targetDisplayName = Instance.new("TextLabel")
-targetDisplayName.Size = UDim2.new(0, 120, 0, 12)
-targetDisplayName.Position = UDim2.new(1, -180, 0, 58)
+targetDisplayName.Size = UDim2.new(1, -20, 0, 8)
+targetDisplayName.Position = UDim2.new(0, 10, 1, -18)
 targetDisplayName.BackgroundTransparency = 1
-targetDisplayName.Text = "Other player display name:"
-targetDisplayName.TextColor3 = Color3.fromRGB(255, 255, 255)
+targetDisplayName.Text = "No player selected"
+targetDisplayName.TextColor3 = Color3.fromRGB(200, 200, 200)
 targetDisplayName.TextSize = 10
 targetDisplayName.Font = Enum.Font.GothamSemibold
-targetDisplayName.TextXAlignment = Enum.TextXAlignment.Right
+targetDisplayName.TextXAlignment = Enum.TextXAlignment.Center
 targetDisplayName.Parent = playerInfoFrame
 
 local targetUsername = Instance.new("TextLabel")
-targetUsername.Size = UDim2.new(0, 120, 0, 12)
-targetUsername.Position = UDim2.new(1, -180, 0, 68)
+targetUsername.Size = UDim2.new(1, -20, 0, 8)
+targetUsername.Position = UDim2.new(0, 10, 1, -8)
 targetUsername.BackgroundTransparency = 1
-targetUsername.Text = "Other player username:"
-targetUsername.TextColor3 = Color3.fromRGB(200, 200, 200)
-targetUsername.TextSize = 10
+targetUsername.Text = "Select a player from dropdown"
+targetUsername.TextColor3 = Color3.fromRGB(150, 150, 150)
+targetUsername.TextSize = 9
 targetUsername.Font = Enum.Font.GothamSemibold
-targetUsername.TextXAlignment = Enum.TextXAlignment.Right
+targetUsername.TextXAlignment = Enum.TextXAlignment.Center
 targetUsername.Parent = playerInfoFrame
 
 -- Function to update player info display
 function updatePlayerInfo()
-    if selectedPlayer then
+    if selectedPlayer and selectedPlayer.Parent then
         targetPlayerThumb.Image = getPlayerThumbnail(selectedPlayer.UserId)
-        targetDisplayName.Text = "Other player display name: " .. selectedPlayer.DisplayName
-        targetUsername.Text = "Other player username: @" .. selectedPlayer.Name
+        targetDisplayName.Text = selectedPlayer.DisplayName
+        targetUsername.Text = "@" .. selectedPlayer.Name
+        placeholderText.Visible = false
     else
         targetPlayerThumb.Image = ""
-        targetDisplayName.Text = "Other player display name:"
-        targetUsername.Text = "Other player username:"
+        targetDisplayName.Text = "No player selected"
+        targetUsername.Text = "Select a player from dropdown"
+        placeholderText.Visible = true
     end
 end
 
@@ -406,6 +448,21 @@ watermark.TextYAlignment = Enum.TextYAlignment.Center
 watermark.Font = Enum.Font.GothamSemibold
 watermark.Parent = mainFrame
 
+-- Button functionality
+minimizeBtn.MouseButton1Click:Connect(function()
+    mainFrame.Visible = false
+    minimizedIcon.Visible = true
+end)
+
+minimizedIcon.MouseButton1Click:Connect(function()
+    minimizedIcon.Visible = false
+    mainFrame.Visible = true
+end)
+
+closeBtn.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
 mainFrame.Active = true
 mainFrame.Draggable = true
 
@@ -454,5 +511,18 @@ startButton.MouseButton1Click:Connect(function()
 end)
 
 -- Auto-update player list when players join/leave
-Players.PlayerAdded:Connect(updatePlayerList)
-Players.PlayerRemoving:Connect(updatePlayerList)
+Players.PlayerAdded:Connect(function()
+    wait(1) -- Small delay to ensure player is fully loaded
+    updatePlayerInfo() -- Check if selected player is still valid
+end)
+
+Players.PlayerRemoving:Connect(function(removedPlayer)
+    if selectedPlayer == removedPlayer then
+        selectedPlayer = nil
+        dropdown.Text = "Select Player ▼"
+        updatePlayerInfo()
+    end
+end)
+
+-- Initialize player info display
+updatePlayerInfo()
