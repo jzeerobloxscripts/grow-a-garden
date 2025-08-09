@@ -23,6 +23,7 @@ mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 mainFrame.BorderSizePixel = 0
 mainFrame.Active = true
 mainFrame.Draggable = true
+mainFrame.ZIndex = 1
 mainFrame.Parent = screenGui
 
 local mainCorner = Instance.new("UICorner")
@@ -37,35 +38,15 @@ mainGradient.Color = ColorSequence.new{
 mainGradient.Rotation = 145
 mainGradient.Parent = mainFrame
 
-local shadow = Instance.new("Frame")
-shadow.Name = "Shadow"
-shadow.Size = UDim2.new(1, 6, 1, 6)
-shadow.Position = UDim2.new(0, -3, 0, -3)
-shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-shadow.BackgroundTransparency = 0.7
-shadow.ZIndex = -1
-shadow.Parent = mainFrame
-
-local shadowCorner = Instance.new("UICorner")
-shadowCorner.CornerRadius = UDim.new(0, 23)
-shadowCorner.Parent = shadow
-
-local headerFrame = Instance.new("Frame")
-headerFrame.Name = "HeaderFrame"
-headerFrame.Size = UDim2.new(1, 0, 0, 60)
-headerFrame.Position = UDim2.new(0, 0, 0, 0)
-headerFrame.BackgroundTransparency = 1
-headerFrame.BorderSizePixel = 0
-headerFrame.Parent = mainFrame
-
 local profileFrame = Instance.new("ImageLabel")
 profileFrame.Name = "ProfileFrame"
 profileFrame.Size = UDim2.new(0, 50, 0, 50)
-profileFrame.Position = UDim2.new(0, 10, 0, 5)
+profileFrame.Position = UDim2.new(0, 15, 0, 15)
 profileFrame.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
 profileFrame.BorderSizePixel = 0
 profileFrame.Image = thumbnailUrl
-profileFrame.Parent = headerFrame
+profileFrame.ZIndex = 2
+profileFrame.Parent = mainFrame
 
 local profileCorner = Instance.new("UICorner")
 profileCorner.CornerRadius = UDim.new(1, 0)
@@ -81,6 +62,7 @@ profileText.TextColor3 = Color3.fromRGB(255, 255, 255)
 profileText.TextScaled = true
 profileText.Font = Enum.Font.GothamBold
 profileText.Visible = false
+profileText.ZIndex = 3
 profileText.Parent = profileFrame
 
 profileFrame.ImageFailed:Connect(function()
@@ -89,29 +71,29 @@ end)
 
 local animatedText = Instance.new("TextLabel")
 animatedText.Name = "AnimatedText"
-animatedText.Size = UDim2.new(0, 120, 1, 0)
-animatedText.Position = UDim2.new(0, 70, 0, 0)
+animatedText.Size = UDim2.new(0, 150, 0, 25)
+animatedText.Position = UDim2.new(0, 75, 0, 25)
 animatedText.BackgroundTransparency = 1
 animatedText.Text = "Loading..."
 animatedText.TextColor3 = Color3.fromRGB(99, 102, 241)
 animatedText.TextSize = 14
 animatedText.Font = Enum.Font.Gotham
 animatedText.TextXAlignment = Enum.TextXAlignment.Left
-animatedText.TextYAlignment = Enum.TextYAlignment.Center
-animatedText.Parent = headerFrame
+animatedText.ZIndex = 2
+animatedText.Parent = mainFrame
 
 local titleText = Instance.new("TextLabel")
 titleText.Name = "TitleText"
-titleText.Size = UDim2.new(0, 180, 1, 0)
-titleText.Position = UDim2.new(0.5, -90, 0, 0)
+titleText.Size = UDim2.new(0, 200, 0, 30)
+titleText.Position = UDim2.new(0.5, -100, 0, 15)
 titleText.BackgroundTransparency = 1
 titleText.Text = "Roblox Menu Game GUI"
 titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleText.TextSize = 16
 titleText.Font = Enum.Font.GothamBold
 titleText.TextXAlignment = Enum.TextXAlignment.Center
-titleText.TextYAlignment = Enum.TextYAlignment.Center
-titleText.Parent = headerFrame
+titleText.ZIndex = 2
+titleText.Parent = mainFrame
 
 local minimizeBtn = Instance.new("TextButton")
 minimizeBtn.Name = "MinimizeBtn"
@@ -123,7 +105,8 @@ minimizeBtn.Text = "−"
 minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 minimizeBtn.TextSize = 18
 minimizeBtn.Font = Enum.Font.GothamBold
-minimizeBtn.Parent = headerFrame
+minimizeBtn.ZIndex = 2
+minimizeBtn.Parent = mainFrame
 
 local minimizeCorner = Instance.new("UICorner")
 minimizeCorner.CornerRadius = UDim.new(0, 8)
@@ -133,13 +116,14 @@ local closeBtn = Instance.new("TextButton")
 closeBtn.Name = "CloseBtn"
 closeBtn.Size = UDim2.new(0, 30, 0, 30)
 closeBtn.Position = UDim2.new(1, -40, 0, 15)
-closeBtn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+closeBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
 closeBtn.BorderSizePixel = 0
 closeBtn.Text = "×"
 closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeBtn.TextSize = 18
 closeBtn.Font = Enum.Font.GothamBold
-closeBtn.Parent = headerFrame
+closeBtn.ZIndex = 2
+closeBtn.Parent = mainFrame
 
 local closeCorner = Instance.new("UICorner")
 closeCorner.CornerRadius = UDim.new(0, 8)
@@ -150,6 +134,7 @@ contentFrame.Name = "ContentFrame"
 contentFrame.Size = UDim2.new(1, -20, 1, -100)
 contentFrame.Position = UDim2.new(0, 10, 0, 70)
 contentFrame.BackgroundTransparency = 1
+contentFrame.ZIndex = 1
 contentFrame.Parent = mainFrame
 
 local watermark = Instance.new("TextLabel")
@@ -162,6 +147,7 @@ watermark.Text = "by Jzee Scripts (@notjzee) YouTube & TikTok"
 watermark.TextColor3 = Color3.fromRGB(120, 120, 120)
 watermark.TextSize = 12
 watermark.Font = Enum.Font.Gotham
+watermark.ZIndex = 2
 watermark.Parent = mainFrame
 
 local watermarkCorner = Instance.new("UICorner")
@@ -173,6 +159,7 @@ watermarkCornerFix.Size = UDim2.new(1, 0, 0, 20)
 watermarkCornerFix.Position = UDim2.new(0, 0, 0, 0)
 watermarkCornerFix.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
 watermarkCornerFix.BorderSizePixel = 0
+watermarkCornerFix.ZIndex = 2
 watermarkCornerFix.Parent = watermark
 
 local glitchChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?"
@@ -259,14 +246,14 @@ end)
 
 closeBtn.MouseEnter:Connect(function()
     local tween = TweenService:Create(closeBtn, TweenInfo.new(0.2), {
-        BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+        BackgroundColor3 = Color3.fromRGB(255, 80, 80)
     })
     tween:Play()
 end)
 
 closeBtn.MouseLeave:Connect(function()
     local tween = TweenService:Create(closeBtn, TweenInfo.new(0.2), {
-        BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        BackgroundColor3 = Color3.fromRGB(220, 60, 60)
     })
     tween:Play()
 end)
