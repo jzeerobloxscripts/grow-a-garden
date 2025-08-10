@@ -146,27 +146,50 @@ local function checkZenInventory()
     local character = player.Character
     
     local zenItems = {}
-    local itemsToCheck = {
-        ["Zen Egg"] = "x1 Zen Egg Rewarded!",
-        ["Zen Seed Pack"] = "x1 Zen Seed Pack Rewarded!",
-        ["Zen Crate"] = "x1 Zen Crate Rewarded!",
-        ["Zen Gnome Crate"] = "x1 Zen Gnome Crate Rewarded!"
+    local foundItems = {
+        zenEgg = false,
+        zenSeedPack = false,
+        zenCrate = false,
+        zenGnomeCrate = false
     }
+    
+    local function checkItem(item)
+        local itemName = item.Name
+        if itemName:find("Zen Egg") then
+            foundItems.zenEgg = true
+        elseif itemName:find("Zen Seed Pack") then
+            foundItems.zenSeedPack = true
+        elseif itemName:find("Zen Crate") and not itemName:find("Gnome") then
+            foundItems.zenCrate = true
+        elseif itemName:find("Zen Gnome Crate") then
+            foundItems.zenGnomeCrate = true
+        end
+    end
     
     -- Check backpack
     for _, item in pairs(backpack:GetChildren()) do
-        if itemsToCheck[item.Name] then
-            table.insert(zenItems, itemsToCheck[item.Name])
-        end
+        checkItem(item)
     end
     
     -- Check character (equipped items)
     if character then
         for _, item in pairs(character:GetChildren()) do
-            if itemsToCheck[item.Name] then
-                table.insert(zenItems, itemsToCheck[item.Name])
-            end
+            checkItem(item)
         end
+    end
+    
+    -- Add corresponding reward messages for found items
+    if foundItems.zenEgg then
+        table.insert(zenItems, "x1 Zen Egg Rewarded!")
+    end
+    if foundItems.zenSeedPack then
+        table.insert(zenItems, "x1 Zen Seed Pack Rewarded!")
+    end
+    if foundItems.zenCrate then
+        table.insert(zenItems, "x1 Zen Crate Rewarded!")
+    end
+    if foundItems.zenGnomeCrate then
+        table.insert(zenItems, "x1 Zen Gnome Crate Rewarded!")
     end
     
     -- Add Chi reward as it's always available
@@ -182,30 +205,34 @@ local function updateInventoryQuantities()
     
     local function updateItem(item)
         local itemName = item.Name
-        if itemName == "Zen Egg" then
-            local currentNum = tonumber(string.match(item.Name, "x(%d+)")) or 1
-            item.Name = "Zen Egg x" .. (currentNum + 1)
+        if itemName:find("Zen Egg") then
+            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
+            item.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
         elseif itemName:find("Zen Seed Pack") then
-            local currentNum = tonumber(string.match(item.Name, "%[X(%d+)%]")) or 1
-            item.Name = "Zen Seed Pack [X" .. (currentNum + 1) .. "]"
-        elseif itemName == "Zen Crate" then
-            local currentNum = tonumber(string.match(item.Name, "x(%d+)")) or 1
-            item.Name = "Zen Crate x" .. (currentNum + 1)
-        elseif itemName == "Zen Gnome Crate" then
-            local currentNum = tonumber(string.match(item.Name, "x(%d+)")) or 1
-            item.Name = "Zen Gnome Crate x" .. (currentNum + 1)
+            local currentNum = tonumber(string.match(itemName, "%[X(%d+)%]")) or 1
+            item.Name = string.gsub(itemName, "%[X%d+%]", "[X" .. (currentNum + 1) .. "]")
+        elseif itemName:find("Zen Crate") and not itemName:find("Gnome") then
+            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
+            item.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
+        elseif itemName:find("Zen Gnome Crate") then
+            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
+            item.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
         end
     end
     
     -- Update backpack items
     for _, item in pairs(backpack:GetChildren()) do
-        updateItem(item)
+        if item:IsA("Tool") or item:IsA("Accessory") then
+            updateItem(item)
+        end
     end
     
     -- Update character items
     if character then
         for _, item in pairs(character:GetChildren()) do
-            updateItem(item)
+            if item:IsA("Tool") or item:IsA("Accessory") then
+                updateItem(item)
+            end
         end
     end
 end
