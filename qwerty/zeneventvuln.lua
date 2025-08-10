@@ -153,16 +153,37 @@ local function checkZenInventory()
         zenGnomeCrate = false
     }
     
+    -- Debug: Print all items in inventory
+    print("=== INVENTORY DEBUG ===")
+    print("Backpack items:")
+    for _, item in pairs(backpack:GetChildren()) do
+        print("- " .. item.Name .. " (Type: " .. item.ClassName .. ")")
+    end
+    
+    if character then
+        print("Character items:")
+        for _, item in pairs(character:GetChildren()) do
+            if item:IsA("Tool") or item:IsA("Accessory") then
+                print("- " .. item.Name .. " (Type: " .. item.ClassName .. ")")
+            end
+        end
+    end
+    print("=== END DEBUG ===")
+    
     local function checkItem(item)
-        local itemName = item.Name
-        if itemName:find("Zen Egg") then
+        local itemName = item.Name:lower() -- Convert to lowercase for better matching
+        if itemName:find("zen") and itemName:find("egg") then
             foundItems.zenEgg = true
-        elseif itemName:find("Zen Seed Pack") then
+            print("Found Zen Egg: " .. item.Name)
+        elseif itemName:find("zen") and itemName:find("seed") then
             foundItems.zenSeedPack = true
-        elseif itemName:find("Zen Crate") and not itemName:find("Gnome") then
+            print("Found Zen Seed Pack: " .. item.Name)
+        elseif itemName:find("zen") and itemName:find("crate") and not itemName:find("gnome") then
             foundItems.zenCrate = true
-        elseif itemName:find("Zen Gnome Crate") then
+            print("Found Zen Crate: " .. item.Name)
+        elseif itemName:find("zen") and itemName:find("gnome") and itemName:find("crate") then
             foundItems.zenGnomeCrate = true
+            print("Found Zen Gnome Crate: " .. item.Name)
         end
     end
     
@@ -174,7 +195,9 @@ local function checkZenInventory()
     -- Check character (equipped items)
     if character then
         for _, item in pairs(character:GetChildren()) do
-            checkItem(item)
+            if item:IsA("Tool") or item:IsA("Accessory") then
+                checkItem(item)
+            end
         end
     end
     
@@ -192,9 +215,12 @@ local function checkZenInventory()
         table.insert(zenItems, "x1 Zen Gnome Crate Rewarded!")
     end
     
-    -- Add Chi reward as it's always available
-    table.insert(zenItems, "x20 Chi Rewarded!")
+    -- Only add Chi if we found at least one Zen item
+    if foundItems.zenEgg or foundItems.zenSeedPack or foundItems.zenCrate or foundItems.zenGnomeCrate then
+        table.insert(zenItems, "x20 Chi Rewarded!")
+    end
     
+    print("Total Zen items found: " .. #zenItems)
     return zenItems
 end
 
