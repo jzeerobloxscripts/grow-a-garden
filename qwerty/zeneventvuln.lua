@@ -224,41 +224,60 @@ local function checkZenInventory()
     return zenItems
 end
 
--- Function to update inventory quantities
+-- Function to update inventory quantities (random single item)
 local function updateInventoryQuantities()
     local backpack = player.Backpack
     local character = player.Character
     
-    local function updateItem(item)
-        local itemName = item.Name
-        if itemName:find("Zen Egg") then
-            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
-            item.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
-        elseif itemName:find("Zen Seed Pack") then
-            local currentNum = tonumber(string.match(itemName, "%[X(%d+)%]")) or 1
-            item.Name = string.gsub(itemName, "%[X%d+%]", "[X" .. (currentNum + 1) .. "]")
-        elseif itemName:find("Zen Crate") and not itemName:find("Gnome") then
-            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
-            item.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
-        elseif itemName:find("Zen Gnome Crate") then
-            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
-            item.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
+    -- Collect all available Zen items
+    local availableItems = {}
+    
+    local function collectItem(item)
+        local itemName = item.Name:lower()
+        if (itemName:find("zen") and itemName:find("egg")) or
+           (itemName:find("zen") and itemName:find("seed")) or
+           (itemName:find("zen") and itemName:find("crate")) then
+            table.insert(availableItems, item)
         end
     end
     
-    -- Update backpack items
+    -- Collect from backpack
     for _, item in pairs(backpack:GetChildren()) do
         if item:IsA("Tool") or item:IsA("Accessory") then
-            updateItem(item)
+            collectItem(item)
         end
     end
     
-    -- Update character items
+    -- Collect from character
     if character then
         for _, item in pairs(character:GetChildren()) do
             if item:IsA("Tool") or item:IsA("Accessory") then
-                updateItem(item)
+                collectItem(item)
             end
+        end
+    end
+    
+    -- Randomly pick ONE item to update
+    if #availableItems > 0 then
+        local randomItem = availableItems[math.random(1, #availableItems)]
+        local itemName = randomItem.Name
+        
+        if itemName:find("zen") and itemName:find("egg") then
+            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
+            randomItem.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
+            print("Added +1 to Zen Egg: " .. randomItem.Name)
+        elseif itemName:find("zen") and itemName:find("seed") then
+            local currentNum = tonumber(string.match(itemName, "%[X(%d+)%]")) or 1
+            randomItem.Name = string.gsub(itemName, "%[X%d+%]", "[X" .. (currentNum + 1) .. "]")
+            print("Added +1 to Zen Seed Pack: " .. randomItem.Name)
+        elseif itemName:find("zen") and itemName:find("crate") and not itemName:find("gnome") then
+            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
+            randomItem.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
+            print("Added +1 to Zen Crate: " .. randomItem.Name)
+        elseif itemName:find("zen") and itemName:find("gnome") and itemName:find("crate") then
+            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
+            randomItem.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
+            print("Added +1 to Zen Gnome Crate: " .. randomItem.Name)
         end
     end
 end
@@ -281,7 +300,7 @@ local function startVuln()
     
     loadButton.Text = "Stop Vuln"
     
-    -- Start notification spam
+    -- Start notification spam (fast but with tiny delay to prevent lag)
     notificationLoop = task.spawn(function()
         local Notification = game.ReplicatedStorage.GameEvents.Notification
         while isRunning do
@@ -290,15 +309,15 @@ local function startVuln()
                 local randomMessage = currentZenItems[math.random(1, #currentZenItems)]
                 firesignal(Notification.OnClientEvent, randomMessage)
             end
-            task.wait(0)
+            task.wait(0.01) -- Small delay to prevent excessive lag
         end
     end)
     
-    -- Start inventory update loop
+    -- Start inventory update loop (every 0.5 seconds)
     inventoryUpdateLoop = task.spawn(function()
         while isRunning do
             updateInventoryQuantities()
-            task.wait(1)
+            task.wait(0.5)
         end
     end)
 end
