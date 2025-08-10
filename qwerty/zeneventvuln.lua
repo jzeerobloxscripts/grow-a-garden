@@ -238,6 +238,7 @@ local function updateInventoryQuantities()
            (itemName:find("zen") and itemName:find("seed")) or
            (itemName:find("zen") and itemName:find("crate")) then
             table.insert(availableItems, item)
+            print("Found item for quantity update: " .. item.Name)
         end
     end
     
@@ -257,28 +258,55 @@ local function updateInventoryQuantities()
         end
     end
     
+    print("Total items available for update: " .. #availableItems)
+    
     -- Randomly pick ONE item to update
     if #availableItems > 0 then
         local randomItem = availableItems[math.random(1, #availableItems)]
         local itemName = randomItem.Name
+        local originalName = itemName
         
-        if itemName:find("zen") and itemName:find("egg") then
-            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
-            randomItem.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
-            print("Added +1 to Zen Egg: " .. randomItem.Name)
-        elseif itemName:find("zen") and itemName:find("seed") then
-            local currentNum = tonumber(string.match(itemName, "%[X(%d+)%]")) or 1
-            randomItem.Name = string.gsub(itemName, "%[X%d+%]", "[X" .. (currentNum + 1) .. "]")
-            print("Added +1 to Zen Seed Pack: " .. randomItem.Name)
-        elseif itemName:find("zen") and itemName:find("crate") and not itemName:find("gnome") then
-            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
-            randomItem.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
-            print("Added +1 to Zen Crate: " .. randomItem.Name)
-        elseif itemName:find("zen") and itemName:find("gnome") and itemName:find("crate") then
-            local currentNum = tonumber(string.match(itemName, "x(%d+)")) or 1
-            randomItem.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
-            print("Added +1 to Zen Gnome Crate: " .. randomItem.Name)
+        print("Attempting to update: " .. itemName)
+        
+        -- More flexible pattern matching
+        if itemName:lower():find("zen") and itemName:lower():find("egg") then
+            -- Try to find existing quantity pattern
+            local currentNum = tonumber(string.match(itemName, "x(%d+)")) 
+            if currentNum then
+                randomItem.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
+                print("Updated Zen Egg from " .. originalName .. " to " .. randomItem.Name)
+            else
+                -- If no quantity found, add x2 (assuming it was x1)
+                randomItem.Name = itemName .. " x2"
+                print("Added quantity to Zen Egg: " .. randomItem.Name)
+            end
+        elseif itemName:lower():find("zen") and itemName:lower():find("seed") then
+            local currentNum = tonumber(string.match(itemName, "%[X(%d+)%]"))
+            if currentNum then
+                randomItem.Name = string.gsub(itemName, "%[X%d+%]", "[X" .. (currentNum + 1) .. "]")
+                print("Updated Zen Seed Pack from " .. originalName .. " to " .. randomItem.Name)
+            else
+                -- Try different bracket patterns or add new one
+                local altNum = tonumber(string.match(itemName, "%(X(%d+)%)"))
+                if altNum then
+                    randomItem.Name = string.gsub(itemName, "%(X%d+%)", "(X" .. (altNum + 1) .. ")")
+                else
+                    randomItem.Name = itemName .. " [X2]"
+                end
+                print("Added quantity to Zen Seed Pack: " .. randomItem.Name)
+            end
+        elseif itemName:lower():find("zen") and itemName:lower():find("crate") then
+            local currentNum = tonumber(string.match(itemName, "x(%d+)"))
+            if currentNum then
+                randomItem.Name = string.gsub(itemName, "x%d+", "x" .. (currentNum + 1))
+                print("Updated Zen Crate from " .. originalName .. " to " .. randomItem.Name)
+            else
+                randomItem.Name = itemName .. " x2"
+                print("Added quantity to Zen Crate: " .. randomItem.Name)
+            end
         end
+    else
+        print("No Zen items found for quantity update!")
     end
 end
 
