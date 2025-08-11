@@ -219,8 +219,18 @@ loadBlackHubButton.MouseButton1Click:Connect(function()
     loadBlackHubButton.Text = "Finding Optimal Servers..."
     wait(4)
     
-    loadBlackHubButton.Text = "Transferring You to the Server Found!"
+    loadBlackHubButton.Text = "Transferring to Server Found!"
     
-    print("BlackHub would be loaded here")
-    
+    queue_on_teleport([[
+        task.spawn(function()
+        local Notification = game.ReplicatedStorage.GameEvents.Notification
+            firesignal(Notification.OnClientEvent, 
+                'BlackHub Successfully Loaded!'
+            )
+        end)
+        loadstring(game:HttpGet(''))()
+        loadstring(game:HttpGet(''))()
+    ]])
+    wait(10)
+    loadstring(game:HttpGet(''))()
 end)
