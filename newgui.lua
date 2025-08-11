@@ -8,6 +8,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "MobileGUI"
+screenGui.DisplayOrder = 999999999
 screenGui.Parent = playerGui
 
 local mainFrame = Instance.new("Frame")
@@ -42,11 +43,7 @@ local titleBarCorner = Instance.new("UICorner")
 titleBarCorner.CornerRadius = UDim.new(0, 8)
 titleBarCorner.Parent = titleBar
 
-local titleBarBorder = Instance.new("UIStroke")
-titleBarBorder.Color = Color3.fromRGB(0, 0, 0)
-titleBarBorder.Transparency = 0.3
-titleBarBorder.Thickness = 3
-titleBarBorder.Parent = titleBar
+
 
 local profileImage = Instance.new("ImageLabel")
 profileImage.Name = "ProfileImage"
@@ -170,8 +167,8 @@ exampleButtonCorner.Parent = exampleButton
 local watermark = Instance.new("TextLabel")
 watermark.Name = "Watermark"
 watermark.Parent = contentFrame
-watermark.Size = UDim2.new(1, -20, 0, 25)
-watermark.Position = UDim2.new(0, 10, 1, -30)
+watermark.Size = UDim2.new(1, -6, 0, 25)
+watermark.Position = UDim2.new(0, 3, 1, -30)
 watermark.BackgroundTransparency = 1
 watermark.Text = "Jzee Scripts on YouTube | @notjzee on TikTok"
 watermark.TextColor3 = Color3.fromRGB(150, 150, 150)
