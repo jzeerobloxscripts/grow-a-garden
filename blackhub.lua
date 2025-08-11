@@ -214,6 +214,7 @@ loadBlackHubButton.MouseButton1Click:Connect(function()
     loadBlackHubButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     
     queue_on_teleport([[
+        wait(3)
         task.spawn(function()
         local Notification = game.ReplicatedStorage.GameEvents.Notification
             firesignal(Notification.OnClientEvent, 
