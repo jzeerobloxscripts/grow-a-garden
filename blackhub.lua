@@ -118,15 +118,14 @@ contentFrame.Position = UDim2.new(0, 0, 0, 35)
 contentFrame.BackgroundTransparency = 1
 contentFrame.BorderSizePixel = 0
 
--- BlackHub Load Button (centered)
 local loadBlackHubButton = Instance.new("TextButton")
 loadBlackHubButton.Name = "LoadBlackHubButton"
 loadBlackHubButton.Parent = contentFrame
 loadBlackHubButton.Size = UDim2.new(0, 200, 0, 50)
 loadBlackHubButton.Position = UDim2.new(0.5, -100, 0.5, -60)
-loadBlackHubButton.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
+loadBlackHubButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
 loadBlackHubButton.Text = "Load BlackHub"
-loadBlackHubButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+loadBlackHubButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 loadBlackHubButton.TextSize = 16
 loadBlackHubButton.Font = Enum.Font.SourceSansBold
 loadBlackHubButton.BorderSizePixel = 0
@@ -134,8 +133,6 @@ loadBlackHubButton.BorderSizePixel = 0
 local loadBlackHubButtonCorner = Instance.new("UICorner")
 loadBlackHubButtonCorner.CornerRadius = UDim.new(0, 8)
 loadBlackHubButtonCorner.Parent = loadBlackHubButton
-
--- Note Label
 local noteLabel = Instance.new("TextLabel")
 noteLabel.Name = "NoteLabel"
 noteLabel.Parent = contentFrame
@@ -154,7 +151,7 @@ local watermark = Instance.new("TextLabel")
 watermark.Name = "Watermark"
 watermark.Parent = contentFrame
 watermark.Size = UDim2.new(1, -6, 0, 25)
-watermark.Position = UDim2.new(0, 3, 1, -30)
+watermark.Position = UDim2.new(0, 3, 1, -25)
 watermark.BackgroundTransparency = 1
 watermark.Text = "Jzee Scripts on YouTube | @notjzee on TikTok"
 watermark.TextColor3 = Color3.fromRGB(150, 150, 150)
@@ -210,33 +207,20 @@ closeButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
--- BlackHub Loading Function
 loadBlackHubButton.MouseButton1Click:Connect(function()
     if isLoading then return end
     isLoading = true
     
-    -- Disable button during loading
     loadBlackHubButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     
-    -- Phase 1: Loading BlackHub... (2 seconds)
     loadBlackHubButton.Text = "Loading BlackHub..."
     wait(2)
     
-    -- Phase 2: Finding Optimal Servers... (4 seconds)
     loadBlackHubButton.Text = "Finding Optimal Servers..."
     wait(4)
     
-    -- Phase 3: Transferring You to the Server Found!
     loadBlackHubButton.Text = "Transferring You to the Server Found!"
-    wait(1)
     
-    -- Add your BlackHub loading code here
-    -- Example placeholder:
     print("BlackHub would be loaded here")
-    -- loadstring(game:HttpGet("https://example.com/blackhub.lua"))()
     
-    -- Reset button after completion (optional)
-    loadBlackHubButton.Text = "Load BlackHub"
-    loadBlackHubButton.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
-    isLoading = false
 end)
