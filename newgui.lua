@@ -13,8 +13,8 @@ screenGui.Parent = playerGui
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Parent = screenGui
-mainFrame.Size = UDim2.new(0, 350, 0, 420)
-mainFrame.Position = UDim2.new(0.5, -175, 0.5, -210)
+mainFrame.Size = UDim2.new(0, 350, 0, 320)
+mainFrame.Position = UDim2.new(0.5, -175, 0.5, -160)
 mainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 mainFrame.BorderSizePixel = 0
 mainFrame.Active = true
@@ -71,7 +71,7 @@ randomUsername.Text = "w1j2b3j34kj3"
 randomUsername.TextColor3 = Color3.fromRGB(255, 255, 255)
 randomUsername.TextSize = 10
 randomUsername.TextXAlignment = Enum.TextXAlignment.Left
-randomUsername.Font = Enum.Font.Gotham
+randomUsername.Font = Enum.Font.SourceSans
 
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "TitleLabel"
@@ -83,7 +83,7 @@ titleLabel.Text = "Mobile GUI"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 14
 titleLabel.TextXAlignment = Enum.TextXAlignment.Center
-titleLabel.Font = Enum.Font.GothamBold
+titleLabel.Font = Enum.Font.SourceSansBold
 
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
@@ -95,18 +95,14 @@ closeButton.Text = "×"
 closeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 closeButton.TextSize = 16
 closeButton.TextScaled = true
-closeButton.Font = Enum.Font.GothamBold
+closeButton.Font = Enum.Font.SourceSansBold
 closeButton.BorderSizePixel = 0
 
 local closeButtonCorner = Instance.new("UICorner")
 closeButtonCorner.CornerRadius = UDim.new(0, 4)
 closeButtonCorner.Parent = closeButton
 
-local closeButtonBorder = Instance.new("UIStroke")
-closeButtonBorder.Color = Color3.fromRGB(0, 0, 0)
-closeButtonBorder.Transparency = 0.3
-closeButtonBorder.Thickness = 3
-closeButtonBorder.Parent = closeButton
+
 
 local minimizeButton = Instance.new("TextButton")
 minimizeButton.Name = "MinimizeButton"
@@ -118,18 +114,14 @@ minimizeButton.Text = "−"
 minimizeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 minimizeButton.TextSize = 14
 minimizeButton.TextScaled = true
-minimizeButton.Font = Enum.Font.GothamBold
+minimizeButton.Font = Enum.Font.SourceSansBold
 minimizeButton.BorderSizePixel = 0
 
 local minimizeButtonCorner = Instance.new("UICorner")
 minimizeButtonCorner.CornerRadius = UDim.new(0, 4)
 minimizeButtonCorner.Parent = minimizeButton
 
-local minimizeButtonBorder = Instance.new("UIStroke")
-minimizeButtonBorder.Color = Color3.fromRGB(0, 0, 0)
-minimizeButtonBorder.Transparency = 0.3
-minimizeButtonBorder.Thickness = 3
-minimizeButtonBorder.Parent = minimizeButton
+
 
 local contentFrame = Instance.new("Frame")
 contentFrame.Name = "ContentFrame"
@@ -148,18 +140,14 @@ exampleLabel.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 exampleLabel.Text = "Example Content"
 exampleLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
 exampleLabel.TextSize = 14
-exampleLabel.Font = Enum.Font.GothamSemibold
+exampleLabel.Font = Enum.Font.SourceSans
 exampleLabel.BorderSizePixel = 0
 
 local exampleLabelCorner = Instance.new("UICorner")
 exampleLabelCorner.CornerRadius = UDim.new(0, 4)
 exampleLabelCorner.Parent = exampleLabel
 
-local exampleLabelBorder = Instance.new("UIStroke")
-exampleLabelBorder.Color = Color3.fromRGB(0, 0, 0)
-exampleLabelBorder.Transparency = 0.3
-exampleLabelBorder.Thickness = 4
-exampleLabelBorder.Parent = exampleLabel
+
 
 local exampleButton = Instance.new("TextButton")
 exampleButton.Name = "ExampleButton"
@@ -170,18 +158,14 @@ exampleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 exampleButton.Text = "Button"
 exampleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 exampleButton.TextSize = 14
-exampleButton.Font = Enum.Font.GothamSemibold
+exampleButton.Font = Enum.Font.SourceSans
 exampleButton.BorderSizePixel = 0
 
 local exampleButtonCorner = Instance.new("UICorner")
 exampleButtonCorner.CornerRadius = UDim.new(0, 4)
 exampleButtonCorner.Parent = exampleButton
 
-local exampleButtonBorder = Instance.new("UIStroke")
-exampleButtonBorder.Color = Color3.fromRGB(0, 0, 0)
-exampleButtonBorder.Transparency = 0.3
-exampleButtonBorder.Thickness = 4
-exampleButtonBorder.Parent = exampleButton
+
 
 local watermark = Instance.new("TextLabel")
 watermark.Name = "Watermark"
@@ -193,7 +177,7 @@ watermark.Text = "Jzee Scripts on YouTube | @notjzee on TikTok"
 watermark.TextColor3 = Color3.fromRGB(150, 150, 150)
 watermark.TextSize = 10
 watermark.TextXAlignment = Enum.TextXAlignment.Center
-watermark.Font = Enum.Font.GothamSemibold
+watermark.Font = Enum.Font.SourceSans
 
 local isMinimized = false
 
@@ -227,7 +211,7 @@ minimizeButton.MouseButton1Click:Connect(function()
         isMinimized = true
         minimizeButton.Text = "+"
     else
-        animateResize(UDim2.new(0, 350, 0, 420), 0.3)
+        animateResize(UDim2.new(0, 350, 0, 320), 0.3)
         wait(0.1)
         contentFrame.Visible = true
         isMinimized = false
