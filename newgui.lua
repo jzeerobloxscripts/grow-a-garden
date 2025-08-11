@@ -1,6 +1,7 @@
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -12,8 +13,8 @@ screenGui.Parent = playerGui
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Parent = screenGui
-mainFrame.Size = UDim2.new(0, 350, 0, 400)
-mainFrame.Position = UDim2.new(0.5, -175, 0.5, -200)
+mainFrame.Size = UDim2.new(0, 350, 0, 420)
+mainFrame.Position = UDim2.new(0.5, -175, 0.5, -210)
 mainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 mainFrame.BorderSizePixel = 0
 mainFrame.Active = true
@@ -25,8 +26,8 @@ mainFrameCorner.Parent = mainFrame
 
 local mainFrameBorder = Instance.new("UIStroke")
 mainFrameBorder.Color = Color3.fromRGB(0, 0, 0)
-mainFrameBorder.Transparency = 0.5
-mainFrameBorder.Thickness = 2
+mainFrameBorder.Transparency = 0.3
+mainFrameBorder.Thickness = 5
 mainFrameBorder.Parent = mainFrame
 
 local titleBar = Instance.new("Frame")
@@ -43,8 +44,8 @@ titleBarCorner.Parent = titleBar
 
 local titleBarBorder = Instance.new("UIStroke")
 titleBarBorder.Color = Color3.fromRGB(0, 0, 0)
-titleBarBorder.Transparency = 0.5
-titleBarBorder.Thickness = 1
+titleBarBorder.Transparency = 0.3
+titleBarBorder.Thickness = 3
 titleBarBorder.Parent = titleBar
 
 local profileImage = Instance.new("ImageLabel")
@@ -60,17 +61,29 @@ local profileCorner = Instance.new("UICorner")
 profileCorner.CornerRadius = UDim.new(0, 4)
 profileCorner.Parent = profileImage
 
+local randomUsername = Instance.new("TextLabel")
+randomUsername.Name = "RandomUsername"
+randomUsername.Parent = titleBar
+randomUsername.Size = UDim2.new(0, 80, 1, 0)
+randomUsername.Position = UDim2.new(0, 38, 0, 0)
+randomUsername.BackgroundTransparency = 1
+randomUsername.Text = "w1j2b3j34kj3"
+randomUsername.TextColor3 = Color3.fromRGB(255, 255, 255)
+randomUsername.TextSize = 10
+randomUsername.TextXAlignment = Enum.TextXAlignment.Left
+randomUsername.Font = Enum.Font.GothamSemibold
+
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "TitleLabel"
 titleLabel.Parent = titleBar
-titleLabel.Size = UDim2.new(1, -120, 1, 0)
-titleLabel.Position = UDim2.new(0, 40, 0, 0)
+titleLabel.Size = UDim2.new(0, 100, 1, 0)
+titleLabel.Position = UDim2.new(0.5, -50, 0, 0)
 titleLabel.BackgroundTransparency = 1
 titleLabel.Text = "Mobile GUI"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 14
-titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextXAlignment = Enum.TextXAlignment.Center
+titleLabel.Font = Enum.Font.GothamSemibold
 
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
@@ -82,7 +95,7 @@ closeButton.Text = "×"
 closeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 closeButton.TextSize = 16
 closeButton.TextScaled = true
-closeButton.Font = Enum.Font.SourceSansBold
+closeButton.Font = Enum.Font.GothamSemibold
 closeButton.BorderSizePixel = 0
 
 local closeButtonCorner = Instance.new("UICorner")
@@ -91,8 +104,8 @@ closeButtonCorner.Parent = closeButton
 
 local closeButtonBorder = Instance.new("UIStroke")
 closeButtonBorder.Color = Color3.fromRGB(0, 0, 0)
-closeButtonBorder.Transparency = 0.5
-closeButtonBorder.Thickness = 1
+closeButtonBorder.Transparency = 0.3
+closeButtonBorder.Thickness = 3
 closeButtonBorder.Parent = closeButton
 
 local minimizeButton = Instance.new("TextButton")
@@ -105,7 +118,7 @@ minimizeButton.Text = "−"
 minimizeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 minimizeButton.TextSize = 14
 minimizeButton.TextScaled = true
-minimizeButton.Font = Enum.Font.SourceSansBold
+minimizeButton.Font = Enum.Font.GothamSemibold
 minimizeButton.BorderSizePixel = 0
 
 local minimizeButtonCorner = Instance.new("UICorner")
@@ -114,14 +127,14 @@ minimizeButtonCorner.Parent = minimizeButton
 
 local minimizeButtonBorder = Instance.new("UIStroke")
 minimizeButtonBorder.Color = Color3.fromRGB(0, 0, 0)
-minimizeButtonBorder.Transparency = 0.5
-minimizeButtonBorder.Thickness = 1
+minimizeButtonBorder.Transparency = 0.3
+minimizeButtonBorder.Thickness = 3
 minimizeButtonBorder.Parent = minimizeButton
 
 local contentFrame = Instance.new("Frame")
 contentFrame.Name = "ContentFrame"
 contentFrame.Parent = mainFrame
-contentFrame.Size = UDim2.new(1, 0, 1, -35)
+contentFrame.Size = UDim2.new(1, 0, 1, -60)
 contentFrame.Position = UDim2.new(0, 0, 0, 35)
 contentFrame.BackgroundTransparency = 1
 contentFrame.BorderSizePixel = 0
@@ -135,7 +148,7 @@ exampleLabel.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 exampleLabel.Text = "Example Content"
 exampleLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
 exampleLabel.TextSize = 14
-exampleLabel.Font = Enum.Font.SourceSans
+exampleLabel.Font = Enum.Font.GothamSemibold
 exampleLabel.BorderSizePixel = 0
 
 local exampleLabelCorner = Instance.new("UICorner")
@@ -144,8 +157,8 @@ exampleLabelCorner.Parent = exampleLabel
 
 local exampleLabelBorder = Instance.new("UIStroke")
 exampleLabelBorder.Color = Color3.fromRGB(0, 0, 0)
-exampleLabelBorder.Transparency = 0.5
-exampleLabelBorder.Thickness = 1
+exampleLabelBorder.Transparency = 0.3
+exampleLabelBorder.Thickness = 4
 exampleLabelBorder.Parent = exampleLabel
 
 local exampleButton = Instance.new("TextButton")
@@ -157,7 +170,7 @@ exampleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 exampleButton.Text = "Button"
 exampleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 exampleButton.TextSize = 14
-exampleButton.Font = Enum.Font.SourceSans
+exampleButton.Font = Enum.Font.GothamSemibold
 exampleButton.BorderSizePixel = 0
 
 local exampleButtonCorner = Instance.new("UICorner")
@@ -166,11 +179,40 @@ exampleButtonCorner.Parent = exampleButton
 
 local exampleButtonBorder = Instance.new("UIStroke")
 exampleButtonBorder.Color = Color3.fromRGB(0, 0, 0)
-exampleButtonBorder.Transparency = 0.5
-exampleButtonBorder.Thickness = 1
+exampleButtonBorder.Transparency = 0.3
+exampleButtonBorder.Thickness = 4
 exampleButtonBorder.Parent = exampleButton
 
+local watermark = Instance.new("TextLabel")
+watermark.Name = "Watermark"
+watermark.Parent = contentFrame
+watermark.Size = UDim2.new(1, -20, 0, 25)
+watermark.Position = UDim2.new(0, 10, 1, -30)
+watermark.BackgroundTransparency = 1
+watermark.Text = "Jzee Scripts on YouTube | @notjzee on TikTok"
+watermark.TextColor3 = Color3.fromRGB(150, 150, 150)
+watermark.TextSize = 10
+watermark.TextXAlignment = Enum.TextXAlignment.Center
+watermark.Font = Enum.Font.GothamSemibold
+
 local isMinimized = false
+
+local characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
+local function randomizeUsername()
+    local result = ""
+    for i = 1, 12 do
+        local randomIndex = math.random(1, #characters)
+        result = result .. string.sub(characters, randomIndex, randomIndex)
+    end
+    randomUsername.Text = result
+end
+
+local randomizeConnection
+randomizeConnection = RunService.Heartbeat:Connect(function()
+    if math.random() < 0.1 then
+        randomizeUsername()
+    end
+end)
 
 local function animateResize(targetSize, duration)
     local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
@@ -185,7 +227,7 @@ minimizeButton.MouseButton1Click:Connect(function()
         isMinimized = true
         minimizeButton.Text = "+"
     else
-        animateResize(UDim2.new(0, 350, 0, 400), 0.3)
+        animateResize(UDim2.new(0, 350, 0, 420), 0.3)
         wait(0.1)
         contentFrame.Visible = true
         isMinimized = false
@@ -194,6 +236,9 @@ minimizeButton.MouseButton1Click:Connect(function()
 end)
 
 closeButton.MouseButton1Click:Connect(function()
+    if randomizeConnection then
+        randomizeConnection:Disconnect()
+    end
     screenGui:Destroy()
 end)
 
