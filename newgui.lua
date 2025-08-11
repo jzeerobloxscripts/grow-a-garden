@@ -71,7 +71,7 @@ randomUsername.Text = "w1j2b3j34kj3"
 randomUsername.TextColor3 = Color3.fromRGB(255, 255, 255)
 randomUsername.TextSize = 10
 randomUsername.TextXAlignment = Enum.TextXAlignment.Left
-randomUsername.Font = Enum.Font.GothamSemibold
+randomUsername.Font = Enum.Font.Gotham
 
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "TitleLabel"
@@ -83,7 +83,7 @@ titleLabel.Text = "Mobile GUI"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 14
 titleLabel.TextXAlignment = Enum.TextXAlignment.Center
-titleLabel.Font = Enum.Font.GothamSemibold
+titleLabel.Font = Enum.Font.GothamBold
 
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
@@ -95,7 +95,7 @@ closeButton.Text = "×"
 closeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 closeButton.TextSize = 16
 closeButton.TextScaled = true
-closeButton.Font = Enum.Font.GothamSemibold
+closeButton.Font = Enum.Font.GothamBold
 closeButton.BorderSizePixel = 0
 
 local closeButtonCorner = Instance.new("UICorner")
@@ -118,7 +118,7 @@ minimizeButton.Text = "−"
 minimizeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 minimizeButton.TextSize = 14
 minimizeButton.TextScaled = true
-minimizeButton.Font = Enum.Font.GothamSemibold
+minimizeButton.Font = Enum.Font.GothamBold
 minimizeButton.BorderSizePixel = 0
 
 local minimizeButtonCorner = Instance.new("UICorner")
