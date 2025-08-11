@@ -39,10 +39,6 @@ titleBar.Position = UDim2.new(0, 0, 0, 0)
 titleBar.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
 titleBar.BorderSizePixel = 0
 
-local titleBarCorner = Instance.new("UICorner")
-titleBarCorner.CornerRadius = UDim.new(0, 8)
-titleBarCorner.Parent = titleBar
-
 
 
 local profileImage = Instance.new("ImageLabel")
