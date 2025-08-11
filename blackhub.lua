@@ -230,5 +230,5 @@ loadBlackHubButton.MouseButton1Click:Connect(function()
     wait(4)
     
     loadBlackHubButton.Text = "Transferring to Server Found!"
-    loadstring(game:HttpGet(''))()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/jzeerobloxscripts/grow-a-garden/refs/heads/main/qwerty/generalfunctions.lua'))()
 end)
