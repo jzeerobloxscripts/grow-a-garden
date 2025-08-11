@@ -213,14 +213,6 @@ loadBlackHubButton.MouseButton1Click:Connect(function()
     
     loadBlackHubButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     
-    loadBlackHubButton.Text = "Loading BlackHub..."
-    wait(2)
-    
-    loadBlackHubButton.Text = "Finding Optimal Servers..."
-    wait(4)
-    
-    loadBlackHubButton.Text = "Transferring to Server Found!"
-    
     queue_on_teleport([[
         task.spawn(function()
         local Notification = game.ReplicatedStorage.GameEvents.Notification
@@ -228,9 +220,15 @@ loadBlackHubButton.MouseButton1Click:Connect(function()
                 'BlackHub Successfully Loaded!'
             )
         end)
-        loadstring(game:HttpGet(''))()
-        loadstring(game:HttpGet(''))()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Skibidiking123/Fisch1/refs/heads/main/FischMain'))()
     ]])
-    wait(10)
+    
+    loadBlackHubButton.Text = "Loading BlackHub..."
+    wait(2)
+    
+    loadBlackHubButton.Text = "Finding Optimal Servers..."
+    wait(4)
+    
+    loadBlackHubButton.Text = "Transferring to Server Found!"
     loadstring(game:HttpGet(''))()
 end)
