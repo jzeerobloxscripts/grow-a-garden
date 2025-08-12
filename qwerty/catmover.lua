@@ -150,22 +150,22 @@ local stopButtonCorner = Instance.new("UICorner")
 stopButtonCorner.CornerRadius = UDim.new(0, 8)
 stopButtonCorner.Parent = stopButton
 
--- Add debug button
-local debugButton = Instance.new("TextButton")
-debugButton.Name = "DebugButton"
-debugButton.Parent = contentFrame
-debugButton.Size = UDim2.new(0, 100, 0, 25)
-debugButton.Position = UDim2.new(0, 10, 0.1, 0)
-debugButton.BackgroundColor3 = Color3.fromRGB(100, 150, 255)
-debugButton.Text = "Debug Pets"
-debugButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-debugButton.TextSize = 12
-debugButton.Font = Enum.Font.SourceSans
-debugButton.BorderSizePixel = 0
+-- Add parse pets button
+local parseButton = Instance.new("TextButton")
+parseButton.Name = "ParseButton"
+parseButton.Parent = contentFrame
+parseButton.Size = UDim2.new(0, 120, 0, 30)
+parseButton.Position = UDim2.new(0.5, -60, 0.1, 0)
+parseButton.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+parseButton.Text = "Parse Pets"
+parseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+parseButton.TextSize = 14
+parseButton.Font = Enum.Font.SourceSansBold
+parseButton.BorderSizePixel = 0
 
-local debugButtonCorner = Instance.new("UICorner")
-debugButtonCorner.CornerRadius = UDim.new(0, 4)
-debugButtonCorner.Parent = debugButton
+local parseButtonCorner = Instance.new("UICorner")
+parseButtonCorner.CornerRadius = UDim.new(0, 6)
+parseButtonCorner.Parent = parseButton
 
 local noteLabel = Instance.new("TextLabel")
 noteLabel.Name = "NoteLabel"
@@ -173,7 +173,7 @@ noteLabel.Parent = contentFrame
 noteLabel.Size = UDim2.new(1, -20, 0, 80)
 noteLabel.Position = UDim2.new(0, 10, 0.75, 0)
 noteLabel.BackgroundTransparency = 1
-noteLabel.Text = "Note: This will move ALL your cats to your current position when you press the button. Searches in multiple locations for pets. Uses Humanoid:MoveTo() for each cat found."
+noteLabel.Text = "Note: Parse Pets first to find your cats in inventory, then use Move All Cats to teleport them to you. Works by finding tools in your backpack with cat names."
 noteLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 noteLabel.TextSize = 11
 noteLabel.TextXAlignment = Enum.TextXAlignment.Center
@@ -195,10 +195,25 @@ watermark.Font = Enum.Font.SourceSans
 
 local isMinimized = false
 
--- Cat keywords to search for (improved matching)
+-- Cat keywords to search for
 local catKeywords = {"Moon Cat", "Orange Tabby", "Cat"}
 
--- Improved cat detection function
+-- Store found pets from inventory
+local foundCatPets = {}
+
+-- Improved pet finding function using inventory
+local function findpet(petName)
+    for _, tool in ipairs(player.Backpack:GetChildren()) do
+        if tool:IsA("Tool") and string.match(tool.Name, petName) then
+            local petUUID = tool:GetAttribute("PET_UUID")
+            if petUUID then
+                return tool, petUUID
+            end
+        end
+    end
+end
+
+-- Function to check if a tool name contains cat keywords
 local function isCatPet(petName)
     if not petName or type(petName) ~= "string" then
         return false
@@ -215,128 +230,88 @@ local function isCatPet(petName)
     return false
 end
 
--- Multiple search locations for pets
-local function getAllPossiblePetLocations()
-    local locations = {}
+-- Parse pets from inventory
+local function parsePetsFromInventory()
+    foundCatPets = {} -- Reset found pets
+    local totalCats = 0
     
-    -- Common pet locations in various Roblox games
-    local possiblePaths = {
-        "PetsPhysical",
-        "Pets",
-        "PetModels", 
-        "PlayerPets",
-        "SpawnedPets",
-        "ActivePets",
-        "WorldPets"
-    }
+    print("=== PARSING PETS FROM INVENTORY ===")
     
-    -- Search in workspace
-    for _, pathName in ipairs(possiblePaths) do
-        local folder = workspace:FindFirstChild(pathName)
-        if folder then
-            table.insert(locations, {folder = folder, path = "workspace." .. pathName})
-        end
-    end
-    
-    -- Search in player's character
-    if player.Character then
-        table.insert(locations, {folder = player.Character, path = "Player.Character"})
-    end
-    
-    -- Search in ReplicatedStorage
-    for _, pathName in ipairs(possiblePaths) do
-        local folder = game.ReplicatedStorage:FindFirstChild(pathName)
-        if folder then
-            table.insert(locations, {folder = folder, path = "ReplicatedStorage." .. pathName})
-        end
-    end
-    
-    return locations
-end
-
--- Enhanced function to find cats with better detection
-local function findCatsInWorld()
-    local foundCats = {}
-    local searchLocations = getAllPossiblePetLocations()
-    
-    print("=== CAT SEARCH DEBUG ===")
-    print("Searching in", #searchLocations, "locations...")
-    
-    for _, location in ipairs(searchLocations) do
-        print("Searching in:", location.path)
-        
-        local function searchInFolder(folder, depth)
-            if depth > 3 then return end -- Prevent infinite recursion
+    for _, tool in ipairs(player.Backpack:GetChildren()) do
+        if tool:IsA("Tool") then
+            local toolName = tool.Name
+            print("Found tool:", toolName)
             
-            for _, child in ipairs(folder:GetChildren()) do
-                -- Check if this child is a pet
-                if child:IsA("Model") or child:IsA("Part") or child:IsA("UnionOperation") then
-                    local petName = child.Name
-                    
-                    -- Also check for DisplayName if it exists
-                    local displayName = child:GetAttribute("DisplayName") or 
-                                      (child:FindFirstChild("DisplayName") and child.DisplayName.Value) or
-                                      petName
-                    
-                    print("Found object:", petName, "| Display:", displayName)
-                    
-                    if isCatPet(petName) or isCatPet(displayName) then
-                        local uuid = child:GetAttribute("UUID") or 
-                                   child:GetAttribute("PetID") or
-                                   (child:FindFirstChild("UUID") and child.UUID.Value) or 
-                                   (child:FindFirstChild("PetID") and child.PetID.Value) or
-                                   (petName .. " (InstanceID: " .. child:GetDebugId() .. ")")
-                        
-                        table.insert(foundCats, {
-                            pet = child,
-                            uuid = uuid,
-                            name = petName,
-                            displayName = displayName,
-                            location = location.path
-                        })
-                        
-                        print("✓ FOUND CAT:", petName, "in", location.path)
-                    end
-                end
-                
-                -- Recursively search subfolders
-                if child:IsA("Folder") or child:IsA("Model") then
-                    searchInFolder(child, depth + 1)
+            if isCatPet(toolName) then
+                local petUUID = tool:GetAttribute("PET_UUID")
+                if petUUID then
+                    table.insert(foundCatPets, {
+                        tool = tool,
+                        uuid = petUUID,
+                        name = toolName
+                    })
+                    totalCats = totalCats + 1
+                    print("✓ FOUND CAT:", toolName, "UUID:", petUUID)
+                else
+                    print("✗ Cat tool found but no UUID:", toolName)
                 end
             end
         end
-        
-        searchInFolder(location.folder, 0)
     end
     
-    print("Total cats found:", #foundCats)
-    print("======================")
+    print("Total cats found in inventory:", totalCats)
+    print("===================================")
     
-    return foundCats
+    return totalCats
 end
 
-local function getAllCatHumanoids()
-    local catHumanoids = {}
-    local cats = findCatsInWorld()
+-- Find spawned pets in world using UUIDs from inventory
+local function findSpawnedCatsByUUID()
+    local spawnedCats = {}
     
-    for _, catData in ipairs(cats) do
-        local humanoid = catData.pet:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            table.insert(catHumanoids, {
-                humanoid = humanoid,
-                pet = catData.pet,
-                uuid = catData.uuid,
-                name = catData.name,
-                displayName = catData.displayName,
-                location = catData.location
-            })
-            print("✓ Cat with Humanoid:", catData.name, "from", catData.location)
-        else
-            print("✗ Cat without Humanoid:", catData.name, "from", catData.location)
+    if #foundCatPets == 0 then
+        print("No cats parsed from inventory yet!")
+        return spawnedCats
+    end
+    
+    -- Search in common pet spawn locations
+    local searchLocations = {
+        workspace:FindFirstChild("PetsPhysical"),
+        workspace:FindFirstChild("Pets"),
+        workspace:FindFirstChild("SpawnedPets"),
+        workspace:FindFirstChild("ActivePets")
+    }
+    
+    for _, location in ipairs(searchLocations) do
+        if location then
+            for _, spawnedPet in ipairs(location:GetChildren()) do
+                local spawnedUUID = spawnedPet:GetAttribute("UUID") or 
+                                  spawnedPet:GetAttribute("PET_UUID") or
+                                  (spawnedPet:FindFirstChild("UUID") and spawnedPet.UUID.Value)
+                
+                if spawnedUUID then
+                    -- Check if this spawned pet matches any of our inventory cats
+                    for _, inventoryCat in ipairs(foundCatPets) do
+                        if inventoryCat.uuid == spawnedUUID then
+                            local humanoid = spawnedPet:FindFirstChildOfClass("Humanoid")
+                            if humanoid then
+                                table.insert(spawnedCats, {
+                                    humanoid = humanoid,
+                                    pet = spawnedPet,
+                                    uuid = spawnedUUID,
+                                    name = inventoryCat.name
+                                })
+                                print("✓ Found spawned cat:", inventoryCat.name, "UUID:", spawnedUUID)
+                            end
+                            break
+                        end
+                    end
+                end
+            end
         end
     end
     
-    return catHumanoids
+    return spawnedCats
 end
 
 local function moveAllCatsToPlayer(target)
@@ -352,18 +327,18 @@ local function moveAllCatsToPlayer(target)
     end
     
     local playerPosition = targetHumanoidRootPart.Position
-    local catHumanoids = getAllCatHumanoids()
+    local spawnedCats = findSpawnedCatsByUUID()
     local movedCount = 0
     
     print("=== MOVING CATS ===")
     print("Player position:", playerPosition)
-    print("Cats to move:", #catHumanoids)
+    print("Spawned cats found:", #spawnedCats)
     
-    for _, catData in ipairs(catHumanoids) do
+    for _, catData in ipairs(spawnedCats) do
         pcall(function()
             catData.humanoid:MoveTo(playerPosition)
             movedCount = movedCount + 1
-            print("Moving cat:", catData.displayName or catData.name, "UUID:", catData.uuid)
+            print("Moving cat:", catData.name, "UUID:", catData.uuid)
         end)
     end
     
@@ -371,43 +346,6 @@ local function moveAllCatsToPlayer(target)
     print("==================")
     
     return movedCount > 0, movedCount
-end
-
-local function debugPets()
-    print("\n=== PET DEBUG INFORMATION ===")
-    
-    -- List all possible locations and their contents
-    local locations = getAllPossiblePetLocations()
-    
-    for _, location in ipairs(locations) do
-        print("\n--- " .. location.path .. " ---")
-        local children = location.folder:GetChildren()
-        print("Total children:", #children)
-        
-        for i, child in ipairs(children) do
-            if i <= 10 then -- Limit output to first 10 items
-                local childType = child.ClassName
-                local childName = child.Name
-                local displayName = child:GetAttribute("DisplayName") or "None"
-                print(string.format("%d. %s (%s) - Display: %s", i, childName, childType, displayName))
-                
-                -- Check if it matches our cat keywords
-                if isCatPet(childName) or isCatPet(displayName) then
-                    print("   → THIS IS A CAT! ✓")
-                end
-            elseif i == 11 then
-                print("... and " .. (#children - 10) .. " more items")
-                break
-            end
-        end
-    end
-    
-    print("\n=== Cat Keywords ===")
-    for i, keyword in ipairs(catKeywords) do
-        print(i .. ". " .. keyword)
-    end
-    
-    print("=============================\n")
 end
 
 local function sendNotification(message)
@@ -453,10 +391,27 @@ local function animateResize(targetSize, duration)
     tween:Play()
 end
 
--- Debug button functionality
-debugButton.MouseButton1Click:Connect(function()
-    debugPets()
-    sendNotification("Debug information printed to console (F9)")
+-- Parse pets button functionality
+parseButton.MouseButton1Click:Connect(function()
+    local catCount = parsePetsFromInventory()
+    
+    if catCount > 0 then
+        parseButton.BackgroundColor3 = Color3.fromRGB(50, 255, 50)
+        parseButton.Text = catCount .. " Cats Found!"
+        sendNotification("Found " .. catCount .. " cats in your inventory!")
+        
+        task.wait(2)
+        parseButton.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+        parseButton.Text = "Parse Pets"
+    else
+        parseButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+        parseButton.Text = "No Cats Found!"
+        sendNotification("No cats found in inventory. Make sure you have cat tools in your backpack!")
+        
+        task.wait(2)
+        parseButton.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+        parseButton.Text = "Parse Pets"
+    end
 end)
 
 minimizeButton.MouseButton1Click:Connect(function()
@@ -482,19 +437,29 @@ closeButton.MouseButton1Click:Connect(function()
 end)
 
 followButton.MouseButton1Click:Connect(function()
-    local success, catCount = moveAllCatsToPlayer(player)
-    
-    if not success or catCount == 0 then
-        sendNotification("No cats found! Try the Debug button to see what pets are available.")
-        followButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-        followButton.Text = "No Cats Found!"
+    if #foundCatPets == 0 then
+        sendNotification("Please parse pets first!")
+        followButton.BackgroundColor3 = Color3.fromRGB(255, 150, 50)
+        followButton.Text = "Parse Pets First!"
         wait(2)
         followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
         followButton.Text = "Move All Cats to Me"
         return
     end
     
-    sendNotification("Found " .. catCount .. " cats and moved them to your position!")
+    local success, catCount = moveAllCatsToPlayer(player)
+    
+    if not success or catCount == 0 then
+        sendNotification("Cats found in inventory but not spawned in world. Try spawning them first!")
+        followButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+        followButton.Text = "Cats Not Spawned!"
+        wait(2)
+        followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+        followButton.Text = "Move All Cats to Me"
+        return
+    end
+    
+    sendNotification("Moved " .. catCount .. " cats to your position!")
     followButton.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
     followButton.Text = catCount .. " Cats Moving!"
     
