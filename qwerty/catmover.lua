@@ -198,8 +198,9 @@ local isMinimized = false
 -- Cat keywords to search for
 local catKeywords = {"Moon Cat", "Orange Tabby", "Cat"}
 
--- Store found pets from inventory
+-- Store found pets from inventory and saved position
 local foundCatPets = {}
+local savedPlayerPosition = nil
 
 -- Improved pet finding function using inventory
 local function findpet(petName)
@@ -265,53 +266,96 @@ local function parsePetsFromInventory()
     return totalCats
 end
 
--- Find spawned pets in world using UUIDs from inventory
-local function findSpawnedCatsByUUID()
-    local spawnedCats = {}
+-- Direct pet movement using UUIDs
+local function moveCatsByUUID(targetPosition)
+    local movedCount = 0
     
     if #foundCatPets == 0 then
-        print("No cats parsed from inventory yet!")
-        return spawnedCats
+        print("No cats parsed from inventory!")
+        return false, 0
     end
     
-    -- Search in common pet spawn locations
-    local searchLocations = {
-        workspace:FindFirstChild("PetsPhysical"),
-        workspace:FindFirstChild("Pets"),
-        workspace:FindFirstChild("SpawnedPets"),
-        workspace:FindFirstChild("ActivePets")
-    }
+    print("=== MOVING CATS DIRECTLY ===")
+    print("Target position:", targetPosition)
+    print("Cats to move:", #foundCatPets)
     
-    for _, location in ipairs(searchLocations) do
-        if location then
-            for _, spawnedPet in ipairs(location:GetChildren()) do
-                local spawnedUUID = spawnedPet:GetAttribute("UUID") or 
-                                  spawnedPet:GetAttribute("PET_UUID") or
-                                  (spawnedPet:FindFirstChild("UUID") and spawnedPet.UUID.Value)
-                
-                if spawnedUUID then
-                    -- Check if this spawned pet matches any of our inventory cats
-                    for _, inventoryCat in ipairs(foundCatPets) do
-                        if inventoryCat.uuid == spawnedUUID then
+    for _, catData in ipairs(foundCatPets) do
+        pcall(function()
+            -- Try to find and move the pet using various methods
+            local petUUID = catData.uuid
+            local success = false
+            
+            -- Method 1: Try to find in common spawn locations using UUID
+            local searchLocations = {
+                workspace:FindFirstChild("PetsPhysical"),
+                workspace:FindFirstChild("Pets"),
+                workspace:FindFirstChild("SpawnedPets"),
+                workspace:FindFirstChild("ActivePets")
+            }
+            
+            for _, location in ipairs(searchLocations) do
+                if location and not success then
+                    for _, spawnedPet in ipairs(location:GetChildren()) do
+                        local spawnedUUID = spawnedPet:GetAttribute("UUID") or 
+                                          spawnedPet:GetAttribute("PET_UUID") or
+                                          (spawnedPet:FindFirstChild("UUID") and spawnedPet.UUID.Value)
+                        
+                        if spawnedUUID == petUUID then
                             local humanoid = spawnedPet:FindFirstChildOfClass("Humanoid")
                             if humanoid then
-                                table.insert(spawnedCats, {
-                                    humanoid = humanoid,
-                                    pet = spawnedPet,
-                                    uuid = spawnedUUID,
-                                    name = inventoryCat.name
-                                })
-                                print("✓ Found spawned cat:", inventoryCat.name, "UUID:", spawnedUUID)
+                                humanoid:MoveTo(targetPosition)
+                                movedCount = movedCount + 1
+                                success = true
+                                print("✓ Moved cat:", catData.name, "UUID:", petUUID)
+                                break
                             end
-                            break
                         end
                     end
                 end
             end
-        end
+            
+            -- Method 2: Try using game events or remote functions if available
+            if not success then
+                -- Try common pet movement events
+                local possibleEvents = {
+                    "MovePet",
+                    "TeleportPet", 
+                    "SetPetPosition",
+                    "PetFollow"
+                }
+                
+                for _, eventName in ipairs(possibleEvents) do
+                    local event = game.ReplicatedStorage:FindFirstChild(eventName)
+                    if event and event:IsA("RemoteEvent") then
+                        pcall(function()
+                            event:FireServer(petUUID, targetPosition)
+                            success = true
+                            movedCount = movedCount + 1
+                            print("✓ Moved cat via event:", catData.name, "Event:", eventName)
+                        end)
+                        if success then break end
+                    elseif event and event:IsA("RemoteFunction") then
+                        pcall(function()
+                            event:InvokeServer(petUUID, targetPosition)
+                            success = true
+                            movedCount = movedCount + 1
+                            print("✓ Moved cat via function:", catData.name, "Event:", eventName)
+                        end)
+                        if success then break end
+                    end
+                end
+            end
+            
+            if not success then
+                print("✗ Could not move cat:", catData.name, "UUID:", petUUID)
+            end
+        end)
     end
     
-    return spawnedCats
+    print("Successfully moved:", movedCount, "cats")
+    print("============================")
+    
+    return movedCount > 0, movedCount
 end
 
 local function moveAllCatsToPlayer(target)
@@ -326,26 +370,12 @@ local function moveAllCatsToPlayer(target)
         return false, 0
     end
     
-    local playerPosition = targetHumanoidRootPart.Position
-    local spawnedCats = findSpawnedCatsByUUID()
-    local movedCount = 0
+    -- Save the player's current position
+    savedPlayerPosition = targetHumanoidRootPart.Position
+    print("Saved player position:", savedPlayerPosition)
     
-    print("=== MOVING CATS ===")
-    print("Player position:", playerPosition)
-    print("Spawned cats found:", #spawnedCats)
-    
-    for _, catData in ipairs(spawnedCats) do
-        pcall(function()
-            catData.humanoid:MoveTo(playerPosition)
-            movedCount = movedCount + 1
-            print("Moving cat:", catData.name, "UUID:", catData.uuid)
-        end)
-    end
-    
-    print("Successfully moved:", movedCount, "cats")
-    print("==================")
-    
-    return movedCount > 0, movedCount
+    -- Move cats directly using UUIDs
+    return moveCatsByUUID(savedPlayerPosition)
 end
 
 local function sendNotification(message)
