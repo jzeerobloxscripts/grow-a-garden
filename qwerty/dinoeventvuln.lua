@@ -208,6 +208,15 @@ closeButton.MouseButton1Click:Connect(function()
     if randomizeConnection then
         randomizeConnection:Disconnect()
     end
+    if isRunning then
+        isRunning = false
+        if eggLoop then
+            task.cancel(eggLoop)
+        end
+        if notificationLoop then
+            task.cancel(notificationLoop)
+        end
+    end
     screenGui:Destroy()
 end)
 
@@ -220,7 +229,12 @@ loadInfiniteDinoEggButton.MouseButton1Click:Connect(function()
         local dinoEgg = nil
         
         if backpack then
-            dinoEgg = backpack:FindFirstChild("Dinosaur Egg")
+            for _, item in pairs(backpack:GetChildren()) do
+                if item.Name:match("Dinosaur Egg") then
+                    dinoEgg = item
+                    break
+                end
+            end
         end
         
         if playerGui and not dinoEgg then
@@ -233,13 +247,22 @@ loadInfiniteDinoEggButton.MouseButton1Click:Connect(function()
                         for _, child in pairs(hotbar_frame:GetChildren()) do
                             if child:IsA("Frame") then
                                 local tool = child:FindFirstChild("Tool")
-                                if tool and tool.Value and tool.Value.Name == "Dinosaur Egg" then
+                                if tool and tool.Value and tool.Value.Name:match("Dinosaur Egg") then
                                     dinoEgg = tool.Value
                                     break
                                 end
                             end
                         end
                     end
+                end
+            end
+        end
+        
+        if not dinoEgg then
+            for _, child in pairs(player.Character:GetChildren()) do
+                if child:IsA("Tool") and child.Name:match("Dinosaur Egg") then
+                    dinoEgg = child
+                    break
                 end
             end
         end
