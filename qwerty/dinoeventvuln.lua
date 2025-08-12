@@ -208,6 +208,15 @@ closeButton.MouseButton1Click:Connect(function()
     if randomizeConnection then
         randomizeConnection:Disconnect()
     end
+    if isRunning then
+        isRunning = false
+        if eggLoop then
+            task.cancel(eggLoop)
+        end
+        if notificationLoop then
+            task.cancel(notificationLoop)
+        end
+    end
     screenGui:Destroy()
 end)
 
