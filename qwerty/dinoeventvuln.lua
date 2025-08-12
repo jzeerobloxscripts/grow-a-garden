@@ -225,44 +225,54 @@ loadInfiniteDinoEggButton.MouseButton1Click:Connect(function()
     
     if not isRunning then
         local backpack = player:FindFirstChild("Backpack")
-        local playerGui = player:FindFirstChild("PlayerGui")
+        local character = player.Character
         local dinoEgg = nil
         
         if backpack then
             for _, item in pairs(backpack:GetChildren()) do
-                if item.Name:match("Dinosaur Egg") then
+                if item:IsA("Tool") and (item.Name:find("Dinosaur Egg") or item.Name:find("Dino Egg")) then
                     dinoEgg = item
                     break
                 end
             end
         end
         
-        if playerGui and not dinoEgg then
-            local hotbar = playerGui:FindFirstChild("Hotbar")
-            if hotbar then
-                local backpackFrame = hotbar:FindFirstChild("Backpack")
-                if backpackFrame then
-                    local hotbar_frame = backpackFrame:FindFirstChild("Hotbar")
-                    if hotbar_frame then
-                        for _, child in pairs(hotbar_frame:GetChildren()) do
-                            if child:IsA("Frame") then
-                                local tool = child:FindFirstChild("Tool")
-                                if tool and tool.Value and tool.Value.Name:match("Dinosaur Egg") then
-                                    dinoEgg = tool.Value
-                                    break
-                                end
-                            end
+        if character and not dinoEgg then
+            for _, item in pairs(character:GetChildren()) do
+                if item:IsA("Tool") and (item.Name:find("Dinosaur Egg") or item.Name:find("Dino Egg")) then
+                    dinoEgg = item
+                    break
+                end
+            end
+        end
+        
+        if not dinoEgg then
+            local starterGui = player:FindFirstChild("PlayerGui")
+            if starterGui then
+                for _, gui in pairs(starterGui:GetDescendants()) do
+                    if gui:IsA("TextLabel") and (gui.Text:find("Dinosaur Egg") or gui.Text:find("Dino Egg")) then
+                        local toolRef = gui.Parent:FindFirstChild("Tool")
+                        if toolRef and toolRef.Value then
+                            dinoEgg = toolRef.Value
+                            break
                         end
                     end
                 end
             end
         end
         
-        if not dinoEgg then
-            for _, child in pairs(player.Character:GetChildren()) do
-                if child:IsA("Tool") and child.Name:match("Dinosaur Egg") then
-                    dinoEgg = child
-                    break
+        print("Debug: Searching for Dinosaur Egg...")
+        if backpack then
+            print("Backpack contents:")
+            for _, item in pairs(backpack:GetChildren()) do
+                print("- " .. item.Name .. " (" .. item.ClassName .. ")")
+            end
+        end
+        if character then
+            print("Character contents:")
+            for _, item in pairs(character:GetChildren()) do
+                if item:IsA("Tool") then
+                    print("- " .. item.Name .. " (" .. item.ClassName .. ")")
                 end
             end
         end
