@@ -124,7 +124,7 @@ followButton.Parent = contentFrame
 followButton.Size = UDim2.new(0, 200, 0, 50)
 followButton.Position = UDim2.new(0.5, -100, 0.3, -25)
 followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-followButton.Text = "Move Cat to Me"
+followButton.Text = "Move All Cats to Me"
 followButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 followButton.TextSize = 16
 followButton.Font = Enum.Font.SourceSansBold
@@ -156,7 +156,7 @@ noteLabel.Parent = contentFrame
 noteLabel.Size = UDim2.new(1, -20, 0, 80)
 noteLabel.Position = UDim2.new(0, 10, 0.75, 0)
 noteLabel.BackgroundTransparency = 1
-noteLabel.Text = "Note: This will move your cat to your current position when you press the button. Make sure you have a cat equipped or in your backpack. Uses Humanoid:MoveTo() for one-time movement."
+noteLabel.Text = "Note: This will move ALL your cats to your current position when you press the button. Searches directly in workspace PetsPhysical folder. Uses Humanoid:MoveTo() for each cat found."
 noteLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 noteLabel.TextSize = 11
 noteLabel.TextXAlignment = Enum.TextXAlignment.Center
@@ -177,9 +177,6 @@ watermark.TextXAlignment = Enum.TextXAlignment.Center
 watermark.Font = Enum.Font.SourceSans
 
 local isMinimized = false
-local entity = nil
-local petTool = nil
-local petUUID = nil
 
 -- Cat keywords to search for
 local catKeywords = {"Moon Cat", "Orange Tabby", "Cat"}
@@ -194,59 +191,79 @@ local function isCatPet(petName)
     return false
 end
 
-local function findEntityByUUID(uuid)
-    for _, obj in pairs(workspace:GetDescendants()) do
-        if obj:IsA("Model") or obj:IsA("Part") then
-            if obj:GetAttribute("PET_UUID") == uuid or obj:GetAttribute("UUID") == uuid then
-                return obj
-            end
+local function findCatsInWorld()
+    local foundCats = {}
+    
+    -- Check if PetsPhysical folder exists
+    local petsPhysical = workspace:FindFirstChild("PetsPhysical")
+    if not petsPhysical then
+        return foundCats
+    end
+    
+    -- Loop through all pets in PetsPhysical
+    for i, pet in ipairs(petsPhysical:GetChildren()) do
+        if pet and isCatPet(pet.Name) then
+            -- Get UUID using the priority system
+            local uuid = pet:GetAttribute("UUID") or 
+                         (pet:FindFirstChild("UUID") and pet.UUID.Value) or 
+                         (pet.Name .. " (InstanceID: " .. pet:GetDebugId() .. ")")
             
-            local uuidValue = obj:FindFirstChild("UUID")
-            if uuidValue and uuidValue:IsA("StringValue") and uuidValue.Value == uuid then
-                return obj
-            end
+            table.insert(foundCats, {
+                pet = pet,
+                uuid = uuid,
+                name = pet.Name
+            })
         end
     end
     
-    return nil
+    return foundCats
 end
 
-local function findCatInBackpack()
-    for _, tool in pairs(player.Backpack:GetChildren()) do
-        if tool:IsA("Tool") and isCatPet(tool.Name) then
-            local uuid = tool:GetAttribute("PET_UUID")
-            if uuid then
-                return tool, uuid
-            end
+local function getAllCatHumanoids()
+    local catHumanoids = {}
+    local cats = findCatsInWorld()
+    
+    for _, catData in ipairs(cats) do
+        local humanoid = catData.pet:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            table.insert(catHumanoids, {
+                humanoid = humanoid,
+                pet = catData.pet,
+                uuid = catData.uuid,
+                name = catData.name
+            })
         end
     end
-    return nil, nil
+    
+    return catHumanoids
 end
 
-local function moveToPlayer(target)
-    if not entity or not target or not target.Character then
-        return false
+local function moveAllCatsToPlayer(target)
+    if not target or not target.Character then
+        return false, 0
     end
     
-    local humanoid = entity:FindFirstChildOfClass("Humanoid")
     local targetHumanoidRootPart = target.Character:FindFirstChild("HumanoidRootPart")
-    
-    if humanoid and targetHumanoidRootPart then
-        local playerPosition = targetHumanoidRootPart.Position
-        humanoid:MoveTo(playerPosition)
-        return true
+    if not targetHumanoidRootPart then
+        return false, 0
     end
     
-    return false
+    local playerPosition = targetHumanoidRootPart.Position
+    local catHumanoids = getAllCatHumanoids()
+    local movedCount = 0
+    
+    for _, catData in ipairs(catHumanoids) do
+        catData.humanoid:MoveTo(playerPosition)
+        movedCount = movedCount + 1
+        print("Moving cat:", catData.name, "UUID:", catData.uuid)
+    end
+    
+    return movedCount > 0, movedCount
 end
 
 local function stopFollowing()
-    if connection then
-        connection:Disconnect()
-        connection = nil
-    end
-    
-    targetPlayer = nil
+    -- No longer needed for this implementation
+    -- Could be used for future features
 end
 
 local function sendNotification(message)
@@ -302,53 +319,30 @@ closeButton.MouseButton1Click:Connect(function()
 end)
 
 followButton.MouseButton1Click:Connect(function()
-    petTool, petUUID = findCatInBackpack()
+    local success, catCount = moveAllCatsToPlayer(player)
     
-    if not petTool or not petUUID then
+    if not success or catCount == 0 then
         sendNotification("You don't own a cat :(")
         followButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-        followButton.Text = "No Cat Found!"
+        followButton.Text = "No Cats Found!"
         wait(2)
         followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-        followButton.Text = "Move Cat to Me"
+        followButton.Text = "Move All Cats to Me"
         return
     end
     
-    entity = findEntityByUUID(petUUID)
+    sendNotification("Parsed the cats in your Inventory and will now follow you.")
+    followButton.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
+    followButton.Text = catCount .. " Cats Moving!"
     
-    if not entity then
-        followButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-        followButton.Text = "Cat Not in World!"
-        wait(2)
-        followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-        followButton.Text = "Move Cat to Me"
-        return
-    end
-    
-    local success = moveToPlayer(player)
-    if success then
-        sendNotification("Parsed the cats in your Inventory and will now follow you.")
-        followButton.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
-        followButton.Text = "Cat Moving!"
-        
-        -- Reset button text after a delay
-        task.wait(3)
-        followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-        followButton.Text = "Move Cat to Me"
-    else
-        followButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-        followButton.Text = "Failed to Move Cat!"
-        wait(2)
-        followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-        followButton.Text = "Move Cat to Me"
-    end
+    -- Reset button text after a delay
+    task.wait(3)
+    followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+    followButton.Text = "Move All Cats to Me"
 end)
 
 stopButton.MouseButton1Click:Connect(function()
-    entity = nil
-    petTool = nil
-    petUUID = nil
     followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-    followButton.Text = "Move Cat to Me"
-    sendNotification("Reset complete - ready to move cat again!")
+    followButton.Text = "Move All Cats to Me"
+    sendNotification("Reset complete - ready to move cats again!")
 end)
