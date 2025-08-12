@@ -302,21 +302,25 @@ loadInfiniteDinoEggButton.MouseButton1Click:Connect(function()
         isLoading = false
         isRunning = true
         
-        local eggHandle = dinoEgg:FindFirstChild("Handle")
-        if eggHandle then
-            local configuration = eggHandle:FindFirstChild("Configuration")
-            if configuration then
-                local amountValue = configuration:FindFirstChild("Amount")
-                if amountValue then
-                    eggLoop = task.spawn(function()
-                        while isRunning do
-                            amountValue.Value = amountValue.Value + 1
-                            wait(0.33)
-                        end
-                    end)
-                end
+        local function updateEggQuantity()
+            local currentName = dinoEgg.Name
+            local quantity = 1
+            
+            local quantityMatch = currentName:match("x(%d+)")
+            if quantityMatch then
+                quantity = tonumber(quantityMatch) or 1
             end
+            
+            quantity = quantity + 1
+            dinoEgg.Name = "Dinosaur Egg x" .. quantity
         end
+        
+        eggLoop = task.spawn(function()
+            while isRunning do
+                updateEggQuantity()
+                wait(0.33)
+            end
+        end)
         
         notificationLoop = task.spawn(function()
             local Notification = game.ReplicatedStorage.GameEvents.Notification
