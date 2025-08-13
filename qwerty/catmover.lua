@@ -123,9 +123,10 @@ followButton.Name = "FollowButton"
 followButton.Parent = contentFrame
 followButton.Size = UDim2.new(0, 200, 0, 50)
 followButton.Position = UDim2.new(0.5, -100, 0.3, -25)
-followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+-- Initially disabled state
+followButton.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
 followButton.Text = "Move All Cats to Me"
-followButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+followButton.TextColor3 = Color3.fromRGB(60, 60, 60)
 followButton.TextSize = 16
 followButton.Font = Enum.Font.SourceSansBold
 followButton.BorderSizePixel = 0
@@ -150,21 +151,21 @@ local stopButtonCorner = Instance.new("UICorner")
 stopButtonCorner.CornerRadius = UDim.new(0, 8)
 stopButtonCorner.Parent = stopButton
 
--- Add parse pets button
+-- Parse pets button - matching theme with other buttons
 local parseButton = Instance.new("TextButton")
 parseButton.Name = "ParseButton"
 parseButton.Parent = contentFrame
-parseButton.Size = UDim2.new(0, 120, 0, 30)
-parseButton.Position = UDim2.new(0.5, -60, 0.1, 0)
-parseButton.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+parseButton.Size = UDim2.new(0, 200, 0, 40)
+parseButton.Position = UDim2.new(0.5, -100, 0.1, 0)
+parseButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
 parseButton.Text = "Parse Pets"
-parseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+parseButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 parseButton.TextSize = 14
 parseButton.Font = Enum.Font.SourceSansBold
 parseButton.BorderSizePixel = 0
 
 local parseButtonCorner = Instance.new("UICorner")
-parseButtonCorner.CornerRadius = UDim.new(0, 6)
+parseButtonCorner.CornerRadius = UDim.new(0, 8)
 parseButtonCorner.Parent = parseButton
 
 local noteLabel = Instance.new("TextLabel")
@@ -194,34 +195,20 @@ watermark.TextXAlignment = Enum.TextXAlignment.Center
 watermark.Font = Enum.Font.SourceSans
 
 local isMinimized = false
+local isParsed = false -- Track if parsing has been done
 
 -- Cat keywords to search for
 local catKeywords = {"Moon Cat", "Orange Tabby", "Cat"}
 
--- Store found pets from inventory and saved position
+-- Store found pets from inventory
 local foundCatPets = {}
-local savedPlayerPosition = nil
-
--- Improved pet finding function using inventory
-local function findpet(petName)
-    for _, tool in ipairs(player.Backpack:GetChildren()) do
-        if tool:IsA("Tool") and string.match(tool.Name, petName) then
-            local petUUID = tool:GetAttribute("PET_UUID")
-            if petUUID then
-                return tool, petUUID
-            end
-        end
-    end
-end
 
 -- Function to check if a tool name contains cat keywords
 local function isCatPet(petName)
     if not petName or type(petName) ~= "string" then
         return false
     end
-    
     local lowerPetName = string.lower(petName)
-    
     for _, keyword in ipairs(catKeywords) do
         local lowerKeyword = string.lower(keyword)
         if string.find(lowerPetName, lowerKeyword, 1, true) then
@@ -237,7 +224,6 @@ local function parsePetsFromInventory()
     local totalCats = 0
     
     print("=== PARSING PETS FROM INVENTORY ===")
-    
     for _, tool in ipairs(player.Backpack:GetChildren()) do
         if tool:IsA("Tool") then
             local toolName = tool.Name
@@ -262,127 +248,14 @@ local function parsePetsFromInventory()
     
     print("Total cats found in inventory:", totalCats)
     print("===================================")
-    
     return totalCats
 end
 
--- Direct pet movement using UUIDs
-local function moveCatsByUUID(targetPosition)
-    local movedCount = 0
-    
-    if #foundCatPets == 0 then
-        print("No cats parsed from inventory!")
-        return false, 0
-    end
-    
-    print("=== MOVING CATS DIRECTLY ===")
-    print("Target position:", targetPosition)
-    print("Cats to move:", #foundCatPets)
-    
-    for _, catData in ipairs(foundCatPets) do
-        pcall(function()
-            -- Try to find and move the pet using various methods
-            local petUUID = catData.uuid
-            local success = false
-            
-            -- Method 1: Try to find in common spawn locations using UUID
-            local searchLocations = {
-                workspace:FindFirstChild("PetsPhysical"),
-                workspace:FindFirstChild("Pets"),
-                workspace:FindFirstChild("SpawnedPets"),
-                workspace:FindFirstChild("ActivePets")
-            }
-            
-            for _, location in ipairs(searchLocations) do
-                if location and not success then
-                    for _, spawnedPet in ipairs(location:GetChildren()) do
-                        local spawnedUUID = spawnedPet:GetAttribute("UUID") or 
-                                          spawnedPet:GetAttribute("PET_UUID") or
-                                          (spawnedPet:FindFirstChild("UUID") and spawnedPet.UUID.Value)
-                        
-                        if spawnedUUID == petUUID then
-                            local humanoid = spawnedPet:FindFirstChildOfClass("Humanoid")
-                            if humanoid then
-                                humanoid:MoveTo(targetPosition)
-                                movedCount = movedCount + 1
-                                success = true
-                                print("✓ Moved cat:", catData.name, "UUID:", petUUID)
-                                break
-                            end
-                        end
-                    end
-                end
-            end
-            
-            -- Method 2: Try using game events or remote functions if available
-            if not success then
-                -- Try common pet movement events
-                local possibleEvents = {
-                    "MovePet",
-                    "TeleportPet", 
-                    "SetPetPosition",
-                    "PetFollow"
-                }
-                
-                for _, eventName in ipairs(possibleEvents) do
-                    local event = game.ReplicatedStorage:FindFirstChild(eventName)
-                    if event and event:IsA("RemoteEvent") then
-                        pcall(function()
-                            event:FireServer(petUUID, targetPosition)
-                            success = true
-                            movedCount = movedCount + 1
-                            print("✓ Moved cat via event:", catData.name, "Event:", eventName)
-                        end)
-                        if success then break end
-                    elseif event and event:IsA("RemoteFunction") then
-                        pcall(function()
-                            event:InvokeServer(petUUID, targetPosition)
-                            success = true
-                            movedCount = movedCount + 1
-                            print("✓ Moved cat via function:", catData.name, "Event:", eventName)
-                        end)
-                        if success then break end
-                    end
-                end
-            end
-            
-            if not success then
-                print("✗ Could not move cat:", catData.name, "UUID:", petUUID)
-            end
-        end)
-    end
-    
-    print("Successfully moved:", movedCount, "cats")
-    print("============================")
-    
-    return movedCount > 0, movedCount
-end
-
-local function moveAllCatsToPlayer(target)
-    if not target or not target.Character then
-        print("No target or character")
-        return false, 0
-    end
-    
-    local targetHumanoidRootPart = target.Character:FindFirstChild("HumanoidRootPart")
-    if not targetHumanoidRootPart then
-        print("No HumanoidRootPart found")
-        return false, 0
-    end
-    
-    -- Save the player's current position
-    savedPlayerPosition = targetHumanoidRootPart.Position
-    print("Saved player position:", savedPlayerPosition)
-    
-    -- Move cats directly using UUIDs
-    return moveCatsByUUID(savedPlayerPosition)
-end
-
 local function sendNotification(message)
-    task.spawn(function() 
+    task.spawn(function()
         -- Try multiple notification methods
         pcall(function()
-            local Notification = game.ReplicatedStorage.GameEvents.Notification 
+            local Notification = game.ReplicatedStorage.GameEvents.Notification
             firesignal(Notification.OnClientEvent, message)
         end)
         
@@ -421,25 +294,39 @@ local function animateResize(targetSize, duration)
     tween:Play()
 end
 
+-- Enable/disable follow button
+local function setFollowButtonState(enabled)
+    if enabled then
+        followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+        followButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+    else
+        followButton.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
+        followButton.TextColor3 = Color3.fromRGB(60, 60, 60)
+    end
+end
+
 -- Parse pets button functionality
 parseButton.MouseButton1Click:Connect(function()
     local catCount = parsePetsFromInventory()
     
     if catCount > 0 then
-        parseButton.BackgroundColor3 = Color3.fromRGB(50, 255, 50)
+        parseButton.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
         parseButton.Text = catCount .. " Cats Found!"
         sendNotification("Found " .. catCount .. " cats in your inventory!")
         
+        -- Enable the follow button
+        isParsed = true
+        setFollowButtonState(true)
+        
         task.wait(2)
-        parseButton.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+        parseButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
         parseButton.Text = "Parse Pets"
     else
         parseButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
         parseButton.Text = "No Cats Found!"
         sendNotification("No cats found in inventory. Make sure you have cat tools in your backpack!")
-        
         task.wait(2)
-        parseButton.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+        parseButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
         parseButton.Text = "Parse Pets"
     end
 end)
@@ -466,40 +353,42 @@ closeButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
+-- Modified follow button functionality
 followButton.MouseButton1Click:Connect(function()
-    if #foundCatPets == 0 then
+    -- Check if parsing has been done
+    if not isParsed then
         sendNotification("Please parse pets first!")
-        followButton.BackgroundColor3 = Color3.fromRGB(255, 150, 50)
-        followButton.Text = "Parse Pets First!"
-        wait(2)
-        followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-        followButton.Text = "Move All Cats to Me"
         return
     end
     
-    local success, catCount = moveAllCatsToPlayer(player)
-    
-    if not success or catCount == 0 then
-        sendNotification("Cats found in inventory but not spawned in world. Try spawning them first!")
-        followButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-        followButton.Text = "Cats Not Spawned!"
-        wait(2)
-        followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-        followButton.Text = "Move All Cats to Me"
+    -- Check if cats were found
+    if #foundCatPets == 0 then
+        sendNotification("No cats found! Please parse pets again.")
         return
     end
     
-    sendNotification("Moved " .. catCount .. " cats to your position!")
-    followButton.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
-    followButton.Text = catCount .. " Cats Moving!"
+    -- Start loading state
+    followButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0) -- Orange color for loading
+    followButton.Text = "Loading..."
     
-    -- Reset button text after a delay
+    -- Send notification
+    sendNotification("Cats will now slowly go to you gradually. Please Wait.")
+    
+    -- Wait for 1 minute (60 seconds)
+    task.wait(60)
+    
+    -- Reset button after loading
+    followButton.BackgroundColor3 = Color3.fromRGB(100, 255, 100) -- Green for success
+    followButton.Text = "Cats Moving Complete!"
+    
+    -- Reset to normal state after 3 seconds
     task.wait(3)
     followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
     followButton.Text = "Move All Cats to Me"
 end)
 
 stopButton.MouseButton1Click:Connect(function()
+    -- Reset states
     followButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
     followButton.Text = "Move All Cats to Me"
     sendNotification("Reset complete - ready to move cats again!")
