@@ -125,7 +125,7 @@ followButton.Size = UDim2.new(0, 200, 0, 50)
 followButton.Position = UDim2.new(0.5, -100, 0.3, -25)
 -- Initially disabled state
 followButton.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-followButton.Text = "Move All Cats to Me"
+followButton.Text = "Make Cats Follow"
 followButton.TextColor3 = Color3.fromRGB(60, 60, 60)
 followButton.TextSize = 16
 followButton.Font = Enum.Font.SourceSansBold
@@ -174,7 +174,7 @@ noteLabel.Parent = contentFrame
 noteLabel.Size = UDim2.new(1, -20, 0, 80)
 noteLabel.Position = UDim2.new(0, 10, 0.75, 0)
 noteLabel.BackgroundTransparency = 1
-noteLabel.Text = "Note: Parse Pets first to find your cats in inventory, then use Move All Cats to teleport them to you. Works by finding tools in your backpack with cat names."
+noteLabel.Text = "Note: Parse Pets first to find your cats in inventory, then press Make Cats Follow to make them walk towards you."
 noteLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 noteLabel.TextSize = 11
 noteLabel.TextXAlignment = Enum.TextXAlignment.Center
