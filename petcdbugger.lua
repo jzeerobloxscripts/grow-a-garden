@@ -231,7 +231,7 @@ activateButton.MouseButton1Click:Connect(function()
         firesignal(Notification.OnClientEvent, 'Pet Cooldown Bugger Loaded!')
     end)
 
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/jzeerobloxscripts/grow-a-garden/refs/heads/main/Pet Cooldown Bugger.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/jzeerobloxscripts/grow-a-garden/refs/heads/main/petcdfunc.lua"))()
 ]])
     
     activateButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
