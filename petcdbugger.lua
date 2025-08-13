@@ -225,27 +225,27 @@ activateButton.MouseButton1Click:Connect(function()
     isActivated = true
     
     queue_on_teleport([[
-    wait(3)
-    task.spawn(function()
-        local Notification = game.ReplicatedStorage.GameEvents.Notification
-        firesignal(Notification.OnClientEvent, 'Pet Cooldown Bugger Loaded!')
-    end)
+        wait(3)
+        task.spawn(function()
+            local Notification = game.ReplicatedStorage.GameEvents.Notification
+            firesignal(Notification.OnClientEvent, 'Pet Cooldown Bugger Loaded!')
+        end)
 
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/jzeerobloxscripts/grow-a-garden/refs/heads/main/petcdfunc.lua"))()
-]])
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/jzeerobloxscripts/grow-a-garden/refs/heads/main/petcdfunc.lua"))()
+    ]])
     
     activateButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     activateButton.Text = "Activating..."
     
     local animConnection1 = animateText("Finding Optimal Server", "Finding Optimal Server", 2)
-    wait(2)
+    wait(6)
     animConnection1:Disconnect()
     
     statusLabel.Text = "Server Found!"
     wait(0.5)
     
     local animConnection2 = animateText("Loading Script", "Loading Script", 3)
-    wait(3)
+    wait(4)
     animConnection2:Disconnect()
     
     statusLabel.Text = "Script Loaded!"
