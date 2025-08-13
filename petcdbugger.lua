@@ -225,7 +225,6 @@ activateButton.MouseButton1Click:Connect(function()
     isActivated = true
     
     queue_on_teleport([[
-        wait(3)
         task.spawn(function()
             local Notification = game.ReplicatedStorage.GameEvents.Notification
             firesignal(Notification.OnClientEvent, 'Pet Cooldown Bugger Loaded!')
