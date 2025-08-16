@@ -82,7 +82,7 @@ closeButton.Parent = titleBar
 closeButton.Size = UDim2.new(0, 30, 0, 25)
 closeButton.Position = UDim2.new(1, -35, 0, 5)
 closeButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-closeButton.Text = "Ã—"
+closeButton.Text = "×"
 closeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 closeButton.TextSize = 16
 closeButton.TextScaled = true
@@ -99,7 +99,7 @@ minimizeButton.Parent = titleBar
 minimizeButton.Size = UDim2.new(0, 30, 0, 25)
 minimizeButton.Position = UDim2.new(1, -70, 0, 5)
 minimizeButton.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
-minimizeButton.Text = "âˆ'"
+minimizeButton.Text = "−"
 minimizeButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 minimizeButton.TextSize = 14
 minimizeButton.TextScaled = true
@@ -157,7 +157,7 @@ noteLabel.Parent = contentFrame
 noteLabel.Size = UDim2.new(1, -20, 0, 80)
 noteLabel.Position = UDim2.new(0, 10, 0, 150)
 noteLabel.BackgroundTransparency = 1
-noteLabel.Text = "Note: This script is very sensitive when it comes to servers, some may require old servers or a specific server versions in order for the whole vuln to work."
+noteLabel.Text = "Note: This is an early update access and some may be still broken or not working. Its 100% guaranteed that this will appear in your world after the update but its not 100% guaranteed that in this script everything will work this is solely for personal amusement."
 noteLabel.TextColor3 = Color3.fromRGB(200, 200, 100)
 noteLabel.TextSize = 12
 noteLabel.TextXAlignment = Enum.TextXAlignment.Center
@@ -224,40 +224,28 @@ activateButton.MouseButton1Click:Connect(function()
     
     isActivated = true
     
-    queue_on_teleport([[
-wait(3)
-    
-    task.spawn(function()
-        local Notification = game.ReplicatedStorage.GameEvents.Notification
-        firesignal(Notification.OnClientEvent, 'NewScript Loaded!')
-    end)
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/jzeerobloxscripts/grow-a-garden/refs/heads/main/newscript.lua"))()
-]])
-    
     activateButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     activateButton.Text = "Loading..."
     
-    local animConnection1 = animateText("Finding Optimal Server", "Finding Optimal Server", 2)
-    wait(2)
+    local animConnection1 = animateText("Initializing Script", "Initializing Script", 5)
+    wait(24)
     animConnection1:Disconnect()
     
-    statusLabel.Text = "Server Found!"
-    wait(0.5)
+    statusLabel.Text = "Script Initialized!"
+    wait(2)
     
-    local animConnection2 = animateText("Loading Script", "Loading Script", 3)
-    wait(3)
+    local animConnection2 = animateText("Injecting Beanstalk Event", "Injecting Beanstalk Event", 8)
+    wait(16)
     animConnection2:Disconnect()
     
-    statusLabel.Text = "Script Loaded!"
-    wait(0.5)
+    statusLabel.Text = "Beanstalk Event Injected!"
+    wait(2)
     
-    statusLabel.Text = "Transferring to the Server Found!"
-    wait(1)
+    statusLabel.Text = "Loading Beanstalk Event!"
+    wait(10)
     
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/jzeerobloxscripts/grow-a-garden/refs/heads/main/qwerty/generalfunctions.lua"))()
-    
-    statusLabel.Text = "Please Wait... Upon Server Rejoin New UI Will Appear!"
+    statusLabel.Text = "Please Wait..."
+    game:GetService("ReplicatedStorage").Modules.UpdateService.BeanstalkEvent.Parent = workspace
     activateButton.Text = "Loaded"
 end)
 
@@ -272,7 +260,7 @@ minimizeButton.MouseButton1Click:Connect(function()
         wait(0.1)
         contentFrame.Visible = true
         isMinimized = false
-        minimizeButton.Text = "âˆ'"
+        minimizeButton.Text = "−"
     end
 end)
 
