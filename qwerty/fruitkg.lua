@@ -174,7 +174,7 @@ noteLabel.Parent = contentFrame
 noteLabel.Size = UDim2.new(1, -20, 0, 80)
 noteLabel.Position = UDim2.new(0, 10, 0, 195)
 noteLabel.BackgroundTransparency = 1
-noteLabel.Text = "WARNING: Object names are CASE SENSITIVE! Double check your spelling or the function will fail. Click on objects to enlarge them 10x."
+noteLabel.Text = "WARNING: Object names are CASE SENSITIVE! Double check your spelling or the function will fail. Click on fruits to enlarge them."
 noteLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
 noteLabel.TextSize = 12
 noteLabel.TextXAlignment = Enum.TextXAlignment.Center
@@ -401,7 +401,7 @@ activateButton.MouseButton1Click:Connect(function()
     activateButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     activateButton.Text = "Activated - Click Objects!"
     
-    statusLabel.Text = "Script Active! Click on '" .. targetObjectName .. "' objects to enlarge them!"
+    statusLabel.Text = "Script Active! Click on '" .. targetObjectName .. "' fruits to enlarge them!"
     
     mouse.Button1Down:Connect(onMouseClick)
     
